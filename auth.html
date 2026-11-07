@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Sign In & Register – FARMLINK</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#16834A" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <style>
+    .auth-page-wrap {
+      min-height: calc(100vh - 100px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+    }
+    .auth-card {
+      background: #FFFFFF;
+      border-radius: var(--fl-radius-xl);
+      border: 1px solid var(--fl-border);
+      box-shadow: var(--fl-shadow-lg);
+      width: 100%;
+      max-width: 540px;
+      padding: 2.25rem;
+    }
+    .quick-login-card {
+      background: var(--fl-bg);
+      border: 1px solid var(--fl-border);
+      border-radius: var(--fl-radius-md);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      margin-bottom: 0.6rem;
+      transition: all var(--fl-transition-fast);
+    }
+    .quick-login-card:hover {
+      background: var(--fl-primary-light);
+      border-color: var(--fl-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="fl-navbar">
+    <div class="fl-nav-container">
+      <a href="index.html" class="fl-logo">
+        <div class="fl-logo-icon">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <span>FARMLINK</span>
+      </a>
+
+      <ul class="fl-nav-links">
+        <li><a href="index.html" class="fl-nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="fl-nav-link">Marketplace</a></li>
+        <li><a href="farms-map.html" class="fl-nav-link">Nearby Farms</a></li>
+      </ul>
+
+      <div class="fl-nav-actions">
+        <a href="index.html" class="fl-btn fl-btn-ghost fl-btn-sm">
+          <i class="bi bi-arrow-left"></i> Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="auth-page-wrap">
+    <div class="auth-card">
+      
+      <!-- Brand & Mode Segment -->
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div class="fl-logo-icon" style="width: 48px; height: 48px; margin: 0 auto 0.75rem auto; font-size: 1.5rem;">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--fl-primary-dark);">
+          Access Farmlink Platform
+        </h1>
+        <p style="font-size: 0.85rem; color: var(--fl-text-secondary); margin-top: 0.2rem;">
+          Farm-to-Business Agricultural Direct Sourcing Ecosystem
+        </p>
+
+        <!-- Segmented Tab: Sign In vs Register -->
+        <div style="margin-top: 1.25rem;">
+          <div class="fl-segmented" style="width: 100%; display: flex;">
+            <button id="btn-tab-login" class="fl-segmented-item active" style="flex: 1;" onclick="switchAuthMode('login')">
+              Sign In
+            </button>
+            <button id="btn-tab-register" class="fl-segmented-item" style="flex: 1;" onclick="switchAuthMode('register')">
+              Create New Account
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick 1-Click Demo Profiles Box -->
+      <div style="background: var(--fl-primary-subtle); border-radius: var(--fl-radius-md); padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--fl-primary-border);">
+        <div style="font-size: 0.75rem; font-weight: 800; color: var(--fl-primary-dark); text-transform: uppercase; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.35rem;">
+          <i class="bi bi-lightning-charge-fill"></i> Instant 1-Click Demo Access
+        </div>
+
+        <div class="quick-login-card" onclick="FarmlinkApp.switchRole('buyer')">
+          <div style="display: flex; gap: 0.65rem; align-items: center;">
+            <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=80&q=80" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+            <div>
+              <div style="font-weight: 700; font-size: 0.85rem;">Chef Dewa (Restaurant Buyer)</div>
+              <div style="font-size: 0.75rem; color: var(--fl-text-secondary);">Resto Nusantara Gourmet Bandung</div>
+            </div>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--fl-primary); font-weight: 700;">Login →</span>
+        </div>
+
+        <div class="quick-login-card" onclick="FarmlinkApp.switchRole('farmer')">
+          <div style="display: flex; gap: 0.65rem; align-items: center;">
+            <img src="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=80&q=80" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+            <div>
+              <div style="font-weight: 700; font-size: 0.85rem;">Pak Asep Kurniawan (Producer)</div>
+              <div style="font-size: 0.75rem; color: var(--fl-text-secondary);">Kebun Pasir Wangi Organic, Lembang</div>
+            </div>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--fl-primary); font-weight: 700;">Login →</span>
+        </div>
+
+        <div class="quick-login-card" onclick="FarmlinkApp.switchRole('admin')" style="margin-bottom: 0;">
+          <div style="display: flex; gap: 0.65rem; align-items: center;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #0F172A; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.85rem;">Farmlink Operations Lead</div>
+              <div style="font-size: 0.75rem; color: var(--fl-text-secondary);">Admin Platform Control</div>
+            </div>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--fl-primary); font-weight: 700;">Login →</span>
+        </div>
+      </div>
+
+      <!-- FORM 1: LOGIN -->
+      <form id="form-login" onsubmit="handleLoginSubmit(event)">
+        <div class="fl-form-group">
+          <label class="fl-label">Email or Phone Number</label>
+          <input type="text" id="login-email" class="fl-input" placeholder="chef.dewa@nusantaragourmet.com" value="chef.dewa@nusantaragourmet.com" required />
+        </div>
+
+        <div class="fl-form-group">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+            <label class="fl-label" style="margin-bottom: 0;">Password</label>
+            <a href="#" style="font-size: 0.8rem; color: var(--fl-primary); font-weight: 600;" onclick="alert('Demo reset instructions sent to your registered email.')">Forgot?</a>
+          </div>
+          <input type="password" class="fl-input" value="farmlink2026" required />
+        </div>
+
+        <button type="submit" class="fl-btn fl-btn-primary" style="width: 100%; border-radius: var(--fl-radius-pill); margin-top: 0.5rem;">
+          Sign In to Farmlink
+        </button>
+      </form>
+
+      <!-- FORM 2: REGISTER -->
+      <form id="form-register" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+        
+        <!-- Registration Role Selector -->
+        <div class="fl-form-group">
+          <label class="fl-label">I Want to Register As:</label>
+          <div class="fl-segmented" style="width: 100%; display: flex;">
+            <button type="button" id="role-choice-buyer" class="fl-segmented-item active" style="flex: 1;" onclick="setRegisterRole('buyer')">
+              👨‍🍳 Restaurant / Buyer
+            </button>
+            <button type="button" id="role-choice-farmer" class="fl-segmented-item" style="flex: 1;" onclick="setRegisterRole('farmer')">
+              👨‍🌾 Farmer / Producer
+            </button>
+          </div>
+        </div>
+
+        <!-- Common Personal Fields -->
+        <div class="fl-grid-2">
+          <div class="fl-form-group">
+            <label class="fl-label">Full Name</label>
+            <input type="text" id="reg-name" class="fl-input" placeholder="e.g. Budi Santoso" required />
+          </div>
+          <div class="fl-form-group">
+            <label class="fl-label">Phone Number</label>
+            <input type="tel" id="reg-phone" class="fl-input" placeholder="+62 812-xxxx-xxxx" required />
+          </div>
+        </div>
+
+        <div class="fl-form-group">
+          <label class="fl-label">Email Address</label>
+          <input type="email" id="reg-email" class="fl-input" placeholder="budi@example.com" required />
+        </div>
+
+        <!-- Buyer Specific Fields -->
+        <div id="buyer-specific-fields">
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Business / Restaurant Name</label>
+              <input type="text" id="reg-biz-name" class="fl-input" placeholder="e.g. Warung Bu Kris" />
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Business Type</label>
+              <select id="reg-biz-type" class="fl-select">
+                <option value="Restaurant">Restaurant & Cafe</option>
+                <option value="Hotel">Hotel & Banquet</option>
+                <option value="Supermarket">Supermarket & Minimarket</option>
+                <option value="Catering">Industrial Catering</option>
+                <option value="Grocery">Grocery Business</option>
+              </select>
+            </div>
+          </div>
+          <div class="fl-form-group">
+            <label class="fl-label">Business Delivery Address</label>
+            <textarea id="reg-biz-address" class="fl-textarea" rows="2" placeholder="Street, district, city"></textarea>
+          </div>
+        </div>
+
+        <!-- Farmer Specific Fields -->
+        <div id="farmer-specific-fields" style="display: none;">
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Farm Commercial Name</label>
+              <input type="text" id="reg-farm-name" class="fl-input" placeholder="e.g. Berkah Tani Makmur" />
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Farm Location (Regency)</label>
+              <select id="reg-farm-location" class="fl-select">
+                <option value="Lembang, West Java">Lembang (Bandung Barat)</option>
+                <option value="Pangalengan, West Java">Pangalengan (Bandung)</option>
+                <option value="Cianjur, West Java">Pacet & Cipanas (Cianjur)</option>
+                <option value="Sukabumi, West Java">Cicurug (Sukabumi)</option>
+                <option value="Subang, West Java">Jalan Cagak (Subang)</option>
+                <option value="Bogor, West Java">Megamendung (Bogor)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Farm Size</label>
+              <input type="text" id="reg-farm-size" class="fl-input" placeholder="e.g. 3.5 Hectares" />
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Farming Practice</label>
+              <select id="reg-farm-method" class="fl-select">
+                <option value="Organic">Certified Organic</option>
+                <option value="Pesticide-Free">Pesticide-Free (Prima 2)</option>
+                <option value="Standard Farming">Standard Farming</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="fl-form-group">
+          <label class="fl-label">Password</label>
+          <input type="password" id="reg-password" class="fl-input" placeholder="Min. 8 characters" required />
+        </div>
+
+        <button type="submit" class="fl-btn fl-btn-primary" style="width: 100%; border-radius: var(--fl-radius-pill); margin-top: 0.5rem;">
+          Register Account
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentAuthMode = 'login';
+    let currentRegisterRole = 'buyer';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mode = urlParams.get('mode');
+      const role = urlParams.get('role');
+      if (mode === 'register') switchAuthMode('register');
+      if (role === 'farmer') setRegisterRole('farmer');
+    });
+
+    function switchAuthMode(mode) {
+      currentAuthMode = mode;
+      if (mode === 'login') {
+        document.getElementById('btn-tab-login').classList.add('active');
+        document.getElementById('btn-tab-register').classList.remove('active');
+        document.getElementById('form-login').style.display = 'block';
+        document.getElementById('form-register').style.display = 'none';
+      } else {
+        document.getElementById('btn-tab-login').classList.remove('active');
+        document.getElementById('btn-tab-register').classList.add('active');
+        document.getElementById('form-login').style.display = 'none';
+        document.getElementById('form-register').style.display = 'block';
+      }
+    }
+
+    function setRegisterRole(role) {
+      currentRegisterRole = role;
+      if (role === 'buyer') {
+        document.getElementById('role-choice-buyer').classList.add('active');
+        document.getElementById('role-choice-farmer').classList.remove('active');
+        document.getElementById('buyer-specific-fields').style.display = 'block';
+        document.getElementById('farmer-specific-fields').style.display = 'none';
+      } else {
+        document.getElementById('role-choice-buyer').classList.remove('active');
+        document.getElementById('role-choice-farmer').classList.add('active');
+        document.getElementById('buyer-specific-fields').style.display = 'none';
+        document.getElementById('farmer-specific-fields').style.display = 'block';
+      }
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.toLowerCase();
+
+      if (email.includes('asep') || email.includes('farmer')) {
+        FarmlinkApp.switchRole('farmer');
+      } else if (email.includes('admin')) {
+        FarmlinkApp.switchRole('admin');
+      } else {
+        FarmlinkApp.switchRole('buyer');
+      }
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+
+      if (currentRegisterRole === 'farmer') {
+        const newFarmer = {
+          id: "F-" + Date.now().toString().slice(-4),
+          name: name,
+          farmName: document.getElementById('reg-farm-name').value || (name + " Farm"),
+          location: document.getElementById('reg-farm-location').value,
+          farmSize: document.getElementById('reg-farm-size').value || "2.0 Hectares",
+          farmingMethod: document.getElementById('reg-farm-method').value,
+          verificationStatus: "Pending",
+          avatar: "https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=400&q=80",
+          coverImage: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80",
+          coordinates: [-6.8, 107.6],
+          rating: 5.0,
+          reviewCount: 0,
+          completedOrders: 0,
+          specialties: ["Vegetables"]
+        };
+        window.store.saveFarmer(newFarmer);
+        window.store.setCurrentUser({
+          id: newFarmer.id,
+          role: "farmer",
+          name: newFarmer.name,
+          farmName: newFarmer.farmName
+        });
+        FarmlinkToast.show("Farmer Registration submitted! Opening dashboard...", "success");
+        setTimeout(() => window.location.href = "farmer-dashboard.html", 800);
+      } else {
+        const newBuyer = {
+          id: "B-" + Date.now().toString().slice(-4),
+          role: "buyer",
+          name: name,
+          businessName: document.getElementById('reg-biz-name').value || "Commercial Restaurant",
+          email: email
+        };
+        window.store.setCurrentUser(newBuyer);
+        FarmlinkToast.show("Business Account created! Opening buyer dashboard...", "success");
+        setTimeout(() => window.location.href = "buyer-dashboard.html", 800);
+      }
+    }
+  </script>
+</body>
+</html>
+

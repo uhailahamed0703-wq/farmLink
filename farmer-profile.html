@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Farmer Profile – FARMLINK</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#16834A" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <style>
+    .profile-hero {
+      height: 260px;
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      border-radius: 0 0 var(--fl-radius-xl) var(--fl-radius-xl);
+    }
+    .profile-avatar-wrap {
+      margin-top: -65px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .profile-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 5px solid #FFFFFF;
+      box-shadow: var(--fl-shadow-md);
+      object-fit: cover;
+      background: #FFF;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="fl-navbar">
+    <div class="fl-nav-container">
+      <a href="index.html" class="fl-logo">
+        <div class="fl-logo-icon">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <span>FARMLINK</span>
+      </a>
+
+      <ul class="fl-nav-links">
+        <li><a href="index.html" class="fl-nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="fl-nav-link">Explore Products</a></li>
+        <li><a href="farms-map.html" class="fl-nav-link">Nearby Farms</a></li>
+        <li><a href="traceability.html" class="fl-nav-link">Traceability QR</a></li>
+      </ul>
+
+      <div class="fl-nav-actions">
+        <a href="#" class="fl-btn-icon open-cart-btn" title="Shopping Cart">
+          <i class="bi bi-cart3"></i>
+          <span class="fl-badge-count cart-badge-count" style="display:none;">0</span>
+        </a>
+        <a href="farms-map.html" class="fl-btn fl-btn-outline fl-btn-sm">
+          <i class="bi bi-compass"></i> Farm Map
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cover Image -->
+  <div id="farmer-cover" class="profile-hero"></div>
+
+  <!-- Profile Content Container -->
+  <main class="fl-container" style="padding-top: 0;">
+    <div class="profile-avatar-wrap">
+      <div style="display: flex; gap: 1.25rem; align-items: flex-end; flex-wrap: wrap;">
+        <img id="farmer-avatar" src="" alt="Farmer" class="profile-avatar" />
+        <div style="padding-bottom: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <h1 id="farmer-name" style="font-size: 1.8rem; font-weight: 800; color: var(--fl-text);">Pak Asep Kurniawan</h1>
+            <span class="fl-badge fl-badge-verified">
+              <i class="bi bi-patch-check-fill"></i> Verified Producer
+            </span>
+          </div>
+          <div id="farmer-farm-name" style="font-size: 1.05rem; font-weight: 700; color: var(--fl-primary-dark);">Kebun Pasir Wangi Organic</div>
+          <div id="farmer-location-text" style="font-size: 0.85rem; color: var(--fl-text-secondary); margin-top: 0.15rem;">
+            <i class="bi bi-geo-alt-fill" style="color:var(--fl-primary);"></i> Lembang, West Java
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; padding-bottom: 0.5rem;">
+        <button class="fl-btn fl-btn-outline fl-btn-sm" onclick="FarmlinkToast.show('Contact request sent to farmer via WhatsApp bridge (+62 812-2345-6789)', 'info')">
+          <i class="bi bi-telephone"></i> Contact Farmer
+        </button>
+        <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="FarmlinkToast.show('Saved Kebun Pasir Wangi to your preferred farm list!', 'success')">
+          <i class="bi bi-bookmark-plus"></i> Save Farm
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Stats Grid -->
+    <div class="fl-grid-4" style="margin: 2rem 0;">
+      <div class="fl-stat-card">
+        <div class="fl-stat-icon fl-stat-green"><i class="bi bi-rulers"></i></div>
+        <div>
+          <div class="fl-stat-number" id="stat-farm-size">4.5 Ha</div>
+          <div class="fl-stat-label">Cultivated Land</div>
+        </div>
+      </div>
+      <div class="fl-stat-card">
+        <div class="fl-stat-icon fl-stat-blue"><i class="bi bi-award"></i></div>
+        <div>
+          <div class="fl-stat-number" id="stat-method">Organic</div>
+          <div class="fl-stat-label">Farming Practice</div>
+        </div>
+      </div>
+      <div class="fl-stat-card">
+        <div class="fl-stat-icon fl-stat-amber"><i class="bi bi-star-fill"></i></div>
+        <div>
+          <div class="fl-stat-number" id="stat-rating">4.9 / 5.0</div>
+          <div class="fl-stat-label">142 Chef Reviews</div>
+        </div>
+      </div>
+      <div class="fl-stat-card">
+        <div class="fl-stat-icon fl-stat-green"><i class="bi bi-box-seam"></i></div>
+        <div>
+          <div class="fl-stat-number" id="stat-completed">580+</div>
+          <div class="fl-stat-label">B2B Deliveries</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two-column: Story & Certifications / Live Harvest Catalog -->
+    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" class="lg:grid-cols-3">
+      
+      <!-- Left Column: Story & Certifications -->
+      <div>
+        <div class="fl-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">About the Farm & Story</h3>
+          <p id="farmer-story-text" style="color: var(--fl-text-secondary); font-size: 0.925rem; line-height: 1.6;">
+            Story goes here...
+          </p>
+        </div>
+
+        <div class="fl-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">Verified Certifications</h3>
+          <div id="cert-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <!-- Cert list -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Harvests Ready to Purchase -->
+      <div style="grid-column: span 2;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--fl-primary-dark);">Live Harvests Available</h2>
+            <p style="font-size: 0.85rem; color: var(--fl-text-secondary);">Freshly harvested batches from this grower ready for cold logistics.</p>
+          </div>
+          <a href="marketplace.html" class="fl-btn fl-btn-secondary fl-btn-sm">
+            Explore All Produce
+          </a>
+        </div>
+
+        <!-- Crops Grid -->
+        <div id="farmer-products-grid" class="fl-grid-2"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const farmerId = urlParams.get('id') || 'F01';
+      const farmer = window.store.getFarmerById(farmerId);
+
+      if (!farmer) {
+        alert("Farmer profile not found.");
+        window.location.href = 'marketplace.html';
+        return;
+      }
+
+      renderProfile(farmer);
+    });
+
+    function renderProfile(f) {
+      document.title = `${f.farmName} – Farmlink Verified Producer`;
+
+      document.getElementById('farmer-cover').style.backgroundImage = `url('${f.coverImage}')`;
+      document.getElementById('farmer-avatar').src = f.avatar;
+      document.getElementById('farmer-name').textContent = f.name;
+      document.getElementById('farmer-farm-name').textContent = f.farmName;
+      document.getElementById('farmer-location-text').innerHTML = `<i class="bi bi-geo-alt-fill" style="color:var(--fl-primary);"></i> ${f.address || f.location}`;
+      
+      document.getElementById('stat-farm-size').textContent = f.farmSize;
+      document.getElementById('stat-method').textContent = f.farmingMethod;
+      document.getElementById('stat-rating').textContent = `${f.rating} / 5.0`;
+      document.getElementById('stat-completed').textContent = `${f.completedOrders}+`;
+
+      document.getElementById('farmer-story-text').textContent = f.story;
+
+      // Certifications
+      const certList = document.getElementById('cert-list');
+      certList.innerHTML = (f.certifications || []).map(c => `
+        <div style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; color: var(--fl-text);">
+          <i class="bi bi-patch-check-fill" style="color: var(--fl-primary); font-size: 1.1rem;"></i>
+          <span>${c}</span>
+        </div>
+      `).join('');
+
+      // Products by this farmer
+      const crops = window.store.getProductsByFarmer(f.id);
+      const grid = document.getElementById('farmer-products-grid');
+
+      if (crops.length === 0) {
+        grid.innerHTML = `<p style="color:var(--fl-text-secondary); grid-column:span 2;">No active harvests currently listed.</p>`;
+        return;
+      }
+
+      grid.innerHTML = crops.map(p => `
+        <div class="fl-product-card">
+          <div class="fl-product-image-wrap">
+            <img src="${p.image}" alt="${p.name}" class="fl-product-image" />
+            <div class="fl-product-badges">
+              <span class="fl-badge fl-badge-organic">${p.verificationBadge}</span>
+            </div>
+          </div>
+          <div class="fl-product-content">
+            <div class="fl-product-category">${p.category}</div>
+            <a href="product-detail.html?id=${p.id}" class="fl-product-title">${p.name}</a>
+            <div class="fl-product-meta">
+              <span><i class="bi bi-calendar3"></i> Harvest: ${p.harvestDate}</span>
+              <span><i class="bi bi-box-seam"></i> Stock: ${p.availableStock} kg</span>
+            </div>
+            <div class="fl-product-price-row">
+              <div>
+                <div class="fl-price-amount">${formatRupiah(p.price)}</div>
+                <div class="fl-price-unit">per ${p.unit} (Min. ${p.minOrder} kg)</div>
+              </div>
+              <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="FarmlinkApp.quickAddToCart('${p.id}', ${p.minOrder})">
+                <i class="bi bi-cart-plus"></i> Add
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Buyer Dashboard – FARMLINK</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#16834A" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <!-- Chart.js for Spend Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+    }
+    @media (min-width: 1024px) {
+      .dashboard-layout {
+        grid-template-columns: 260px 1fr;
+      }
+    }
+    .dash-sidebar {
+      background: #FFFFFF;
+      border-right: 1px solid var(--fl-border);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--fl-radius-md);
+      font-size: 0.925rem;
+      font-weight: 600;
+      color: var(--fl-text-secondary);
+      cursor: pointer;
+      transition: all var(--fl-transition-fast);
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .dash-nav-item:hover, .dash-nav-item.active {
+      background: var(--fl-primary-light);
+      color: var(--fl-primary-dark);
+    }
+    .dash-nav-item i {
+      font-size: 1.15rem;
+    }
+    .dash-content {
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+    @media (min-width: 768px) {
+      .dash-content {
+        padding: 2.25rem;
+      }
+    }
+    .tab-view {
+      display: none;
+    }
+    .tab-view.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="dash-sidebar">
+      <div style="padding: 0.5rem 0.5rem 1.5rem 0.5rem; display: flex; align-items: center; gap: 0.6rem;">
+        <div class="fl-logo-icon" style="width:34px; height:34px;">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <div style="font-weight: 800; font-size: 1.2rem; color: var(--fl-primary-dark);">FARMLINK</div>
+      </div>
+
+      <!-- Business Buyer Profile Card -->
+      <div style="background: var(--fl-bg); border-radius: var(--fl-radius-lg); padding: 0.85rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; border: 1px solid var(--fl-border);">
+        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=120&q=80" alt="Chef Dewa" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;" />
+        <div style="overflow: hidden;">
+          <div style="font-weight: 700; font-size: 0.875rem; color: var(--fl-text); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Chef Dewa Santika</div>
+          <div style="font-size: 0.75rem; color: var(--fl-primary); font-weight: 600;">Resto Nusantara</div>
+        </div>
+      </div>
+
+      <button class="dash-nav-item active" onclick="switchBuyerTab('overview', this)">
+        <i class="bi bi-grid"></i> Dashboard
+      </button>
+      <a href="marketplace.html" class="dash-nav-item">
+        <i class="bi bi-shop"></i> Explore Products
+      </a>
+      <a href="farms-map.html" class="dash-nav-item">
+        <i class="bi bi-geo-alt"></i> Nearby Farms
+      </a>
+      <button class="dash-nav-item" onclick="switchBuyerTab('orders', this)">
+        <i class="bi bi-bag-check"></i> My Orders
+        <span class="fl-badge fl-badge-verified" style="margin-left: auto; font-size: 0.7rem;">Live (2)</span>
+      </button>
+      <button class="dash-nav-item" onclick="switchBuyerTab('subscriptions', this)">
+        <i class="bi bi-arrow-repeat"></i> Subscriptions
+      </button>
+      <button class="dash-nav-item" onclick="switchBuyerTab('saved', this)">
+        <i class="bi bi-heart"></i> Saved Farmers
+      </button>
+      <a href="traceability.html" class="dash-nav-item">
+        <i class="bi bi-qr-code-scan"></i> Traceability QR
+      </a>
+      <button class="dash-nav-item" onclick="switchBuyerTab('profile', this)">
+        <i class="bi bi-building"></i> Business Profile
+      </button>
+
+      <div style="margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--fl-border);">
+        <a href="index.html" class="dash-nav-item">
+          <i class="bi bi-house"></i> Public Homepage
+        </a>
+        <button class="dash-nav-item" onclick="window.store.logout()" style="color: #DC2626;">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dash-content">
+      
+      <!-- Top Title Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 id="buyer-tab-heading" style="font-size: 1.8rem; font-weight: 800; color: var(--fl-primary-dark);">
+            Procurement Overview
+          </h1>
+          <p style="font-size: 0.9rem; color: var(--fl-text-secondary);">
+            Resto Nusantara Gourmet • Corporate Net-30 Account
+          </p>
+        </div>
+
+        <a href="marketplace.html" class="fl-btn fl-btn-primary">
+          <i class="bi bi-cart-plus"></i> New Wholesale Order
+        </a>
+      </div>
+
+      <!-- ================= TAB 1: OVERVIEW ================= -->
+      <section id="tab-overview" class="tab-view active">
+        <!-- Stats -->
+        <div class="fl-grid-4" style="margin-bottom: 2rem;">
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-green"><i class="bi bi-bag-check-fill"></i></div>
+            <div>
+              <div class="fl-stat-number">84 Orders</div>
+              <div class="fl-stat-label">Total Completed</div>
+            </div>
+          </div>
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-blue"><i class="bi bi-truck"></i></div>
+            <div>
+              <div class="fl-stat-number" id="buyer-active-orders-count">2 Active</div>
+              <div class="fl-stat-label">Orders in Logistics</div>
+            </div>
+          </div>
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-green"><i class="bi bi-cash-stack"></i></div>
+            <div>
+              <div class="fl-stat-number">Rp 48.500.000</div>
+              <div class="fl-stat-label">Monthly Spending</div>
+            </div>
+          </div>
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-amber"><i class="bi bi-arrow-repeat"></i></div>
+            <div>
+              <div class="fl-stat-number">2 Active</div>
+              <div class="fl-stat-label">Standing Subscriptions</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Orders in Transit & Recommended Produce -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" class="lg:grid-cols-2">
+          
+          <!-- Active Orders Stream -->
+          <div class="fl-card" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <h3 style="font-size: 1.15rem; font-weight: 700;">Active Deliveries</h3>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm" onclick="switchBuyerTab('orders')">All Orders</button>
+            </div>
+            <div id="buyer-active-orders-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Recommended Fresh Harvests -->
+          <div class="fl-card" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <h3 style="font-size: 1.15rem; font-weight: 700;">Recommended for Your Kitchen</h3>
+              <a href="marketplace.html" class="fl-btn fl-btn-ghost fl-btn-sm">Marketplace →</a>
+            </div>
+            <div id="buyer-recommended-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: ALL ORDERS ================= -->
+      <section id="tab-orders" class="tab-view">
+        <div class="fl-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">Purchase Orders & Delivery Status</h3>
+          <div id="buyer-full-orders-list">
+            <!-- Full orders rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: RECURRING SUBSCRIPTIONS ================= -->
+      <section id="tab-subscriptions" class="tab-view">
+        <div class="fl-card" style="padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 700;">Automated Recurring Standing Deliveries</h3>
+              <p style="font-size: 0.85rem; color: var(--fl-text-secondary);">Never run out of essential vegetables during peak service times.</p>
+            </div>
+            <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="openCreateSubModal()">
+              <i class="bi bi-plus-lg"></i> Create Subscription
+            </button>
+          </div>
+
+          <div id="buyer-subscriptions-list" class="fl-grid-2">
+            <!-- Subscriptions rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: SAVED FARMERS ================= -->
+      <section id="tab-saved" class="tab-view">
+        <div class="fl-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">Your Preferred Farm Partners</h3>
+          <p style="font-size: 0.85rem; color: var(--fl-text-secondary); margin-bottom: 1.5rem;">
+            Quickly order repeat harvest batches directly from verified growers you trust.
+          </p>
+          <div id="buyer-saved-farmers-grid" class="fl-grid-3">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 5: BUSINESS PROFILE ================= -->
+      <section id="tab-profile" class="tab-view">
+        <div class="fl-card" style="padding: 1.5rem; max-width: 680px;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">Commercial Buyer Profile</h3>
+          <form onsubmit="event.preventDefault(); FarmlinkToast.show('Business profile saved!', 'success');">
+            <div class="fl-grid-2">
+              <div class="fl-form-group">
+                <label class="fl-label">Business Name</label>
+                <input type="text" class="fl-input" value="Resto Nusantara Gourmet Bandung" />
+              </div>
+              <div class="fl-form-group">
+                <label class="fl-label">Business Type</label>
+                <input type="text" class="fl-input" value="Fine Dining Restaurant & Lounge" />
+              </div>
+            </div>
+
+            <div class="fl-grid-2">
+              <div class="fl-form-group">
+                <label class="fl-label">Executive Chef / Buyer Name</label>
+                <input type="text" class="fl-input" value="Chef Dewa Santika" />
+              </div>
+              <div class="fl-form-group">
+                <label class="fl-label">Corporate Email</label>
+                <input type="email" class="fl-input" value="chef.dewa@nusantaragourmet.com" />
+              </div>
+            </div>
+
+            <div class="fl-form-group">
+              <label class="fl-label">Kitchen Delivery Address</label>
+              <textarea class="fl-textarea" rows="2">Jl. Riau No. 128, Cihapit, Bandung, Jawa Barat</textarea>
+            </div>
+
+            <div class="fl-grid-2">
+              <div class="fl-form-group">
+                <label class="fl-label">Approved Credit Term</label>
+                <input type="text" class="fl-input" value="Net-30 Term (Credit Limit Rp 100.000.000)" readonly style="background:#F1F5F9;" />
+              </div>
+              <div class="fl-form-group">
+                <label class="fl-label">Default Arrival Window</label>
+                <input type="text" class="fl-input" value="05:30 - 07:30 WIB" />
+              </div>
+            </div>
+
+            <button type="submit" class="fl-btn fl-btn-primary">Save Profile</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Create Subscription Modal -->
+  <div id="create-sub-modal" class="fl-modal-overlay">
+    <div class="fl-modal-content" style="max-width: 520px;">
+      <div class="fl-modal-handle"></div>
+      <div style="padding: 1.5rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--fl-primary-dark); margin-bottom: 1rem;">
+          Setup Recurring Standing Delivery
+        </h3>
+        <form onsubmit="submitNewSubscription(event)">
+          <div class="fl-form-group">
+            <label class="fl-label">Subscription Title</label>
+            <input type="text" id="sub-title" class="fl-input" placeholder="e.g. Weekly Kitchen Lettuce & Tomato Supply" required />
+          </div>
+
+          <div class="fl-form-group">
+            <label class="fl-label">Select Produce Batch</label>
+            <select id="sub-product" class="fl-select">
+              <option value="PRD-001">Organic Romaine Lettuce (Pak Asep - Rp 17.100/kg)</option>
+              <option value="PRD-002">Fresh Red Tomatoes (Pak Dadang - Rp 11.280/kg)</option>
+              <option value="PRD-007">Kyuri Hidroponik (Pak Hendra - Rp 8.460/kg)</option>
+              <option value="PRD-004">Kentang Granola (Ibu Siti - Rp 14.720/kg)</option>
+            </select>
+          </div>
+
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Recurring Quantity (kg)</label>
+              <input type="number" id="sub-qty" class="fl-input" value="25" required />
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Schedule</label>
+              <select id="sub-schedule" class="fl-select">
+                <option value="Every Monday & Thursday">Every Monday & Thursday</option>
+                <option value="Every Tuesday & Friday">Every Tuesday & Friday</option>
+                <option value="Daily Morning Slot">Daily Morning Slot</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+            <button type="button" class="fl-btn fl-btn-outline" style="flex:1;" onclick="closeCreateSubModal()">Cancel</button>
+            <button type="submit" class="fl-btn fl-btn-primary" style="flex:1;">Activate Subscription</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBuyerDashboard();
+    });
+
+    function switchBuyerTab(tabName, btnEl) {
+      document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.dash-nav-item').forEach(b => b.classList.remove('active'));
+
+      const target = document.getElementById(`tab-${tabName}`);
+      if (target) target.classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+
+      const headings = {
+        'overview': 'Procurement Overview',
+        'orders': 'Commercial Orders & Tracking',
+        'subscriptions': 'Standing Delivery Subscriptions',
+        'saved': 'Preferred Farm Directory',
+        'profile': 'Business Account Profile'
+      };
+      document.getElementById('buyer-tab-heading').textContent = headings[tabName] || 'Buyer Dashboard';
+
+      loadBuyerDashboard();
+    }
+
+    function loadBuyerDashboard() {
+      const orders = window.store.getOrders();
+      const activeOrders = orders.filter(o => o.status !== 'Delivered');
+
+      document.getElementById('buyer-active-orders-count').textContent = `${activeOrders.length} Active`;
+
+      // Render Active Orders in Overview
+      const activeOrdersEl = document.getElementById('buyer-active-orders-list');
+      activeOrdersEl.innerHTML = activeOrders.map(o => `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 0; border-bottom: 1px solid var(--fl-border-light);">
+          <div>
+            <div style="font-weight: 700; font-size: 0.95rem;">${o.id} • ${o.farmName}</div>
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">${o.items.length} items • ${formatRupiah(o.totalAmount)}</div>
+            <div style="font-size: 0.775rem; color: var(--fl-primary); font-weight: 600; margin-top: 2px;">
+              <i class="bi bi-thermometer-snow"></i> Sensor: ${o.driver ? o.driver.coldChainTemp : '6.8°C'}
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span class="fl-badge fl-badge-verified">${o.status}</span>
+            <div style="margin-top: 6px;">
+              <a href="order-tracking.html?id=${o.id}" class="fl-btn fl-btn-primary fl-btn-sm" style="font-size: 0.75rem; padding: 0.25rem 0.65rem;">
+                Live Tracker →
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Render Recommended Produce
+      const recommendedEl = document.getElementById('buyer-recommended-list');
+      const products = window.store.getProducts().slice(0, 3);
+      recommendedEl.innerHTML = products.map(p => `
+        <div style="display: flex; gap: 0.75rem; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid var(--fl-border-light);">
+          <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover;" />
+          <div style="flex: 1;">
+            <div style="font-weight: 700; font-size: 0.9rem;">${p.name}</div>
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">${p.farmName} • ${formatRupiah(p.price)}/kg</div>
+          </div>
+          <button class="fl-btn fl-btn-secondary fl-btn-sm" style="font-size: 0.75rem; padding: 0.25rem 0.6rem;" onclick="FarmlinkApp.quickAddToCart('${p.id}', 10)">
+            <i class="bi bi-cart-plus"></i> Add 10kg
+          </button>
+        </div>
+      `).join('');
+
+      // Render Full Orders Tab
+      const fullOrdersEl = document.getElementById('buyer-full-orders-list');
+      fullOrdersEl.innerHTML = orders.map(o => `
+        <div style="background: var(--fl-bg); border-radius: var(--fl-radius-lg); padding: 1.25rem; margin-bottom: 1rem; border: 1px solid var(--fl-border);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <div>
+              <span style="font-weight: 800; font-size: 1.05rem;">Order #${o.id}</span>
+              <span style="font-size: 0.85rem; color: var(--fl-text-secondary); margin-left: 0.5rem;">${o.farmName}</span>
+            </div>
+            <span class="fl-badge ${o.status === 'Delivered' ? 'fl-badge-organic' : 'fl-badge-verified'}">${o.status}</span>
+          </div>
+
+          <div style="background: #FFFFFF; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem;">
+            ${(o.items || []).map(i => `
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.25rem;">
+                <span>${i.quantity} kg x ${i.productName}</span>
+                <strong>${formatRupiah(i.total || (i.price * i.quantity))}</strong>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="font-size: 0.95rem; font-weight: 800; color: var(--fl-primary-dark);">
+              Total: ${formatRupiah(o.totalAmount)} (${o.paymentMethod})
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <a href="traceability.html?batch=${o.batchId || 'BATCH-ROM-2026-081'}" class="fl-btn fl-btn-outline fl-btn-sm">
+                <i class="bi bi-qr-code"></i> Batch QR
+              </a>
+              <a href="order-tracking.html?id=${o.id}" class="fl-btn fl-btn-primary fl-btn-sm">
+                <i class="bi bi-truck"></i> Track Logistics
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Render Subscriptions
+      const subs = window.store.getSubscriptions();
+      const subsEl = document.getElementById('buyer-subscriptions-list');
+      subsEl.innerHTML = subs.map(s => `
+        <div class="fl-card" style="padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <h4 style="font-weight: 700; font-size: 1rem;">${s.title}</h4>
+            <span class="fl-badge ${s.status === 'Active' ? 'fl-badge-verified' : 'fl-badge-pending'}">${s.status}</span>
+          </div>
+          <div style="font-size: 0.825rem; color: var(--fl-primary); font-weight: 600; margin-bottom: 0.5rem;">
+            <i class="bi bi-calendar-check"></i> ${s.schedule} (${s.timeSlot})
+          </div>
+
+          <div style="background: var(--fl-bg); border-radius: 8px; padding: 0.65rem; font-size: 0.825rem; margin-bottom: 0.75rem;">
+            ${(s.items || []).map(i => `<div>• ${i.qty} kg x ${i.name}</div>`).join('')}
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; border-top: 1px dashed var(--fl-border); padding-top: 0.5rem;">
+            <span>Next Delivery: <strong>${s.nextDelivery || 'Monday'}</strong></span>
+            <button class="fl-btn fl-btn-outline fl-btn-sm" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;" onclick="toggleSub('${s.id}')">
+              ${s.status === 'Active' ? 'Pause' : 'Resume'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      // Render Saved Farmers
+      const farmers = window.store.getFarmers().slice(0, 3);
+      const savedEl = document.getElementById('buyer-saved-farmers-grid');
+      savedEl.innerHTML = farmers.map(f => `
+        <div class="fl-card" style="padding: 1.25rem; text-align: center;">
+          <img src="${f.avatar}" alt="${f.name}" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin: 0 auto 0.75rem auto; border: 2px solid var(--fl-primary);" />
+          <h4 style="font-weight: 700; font-size: 1rem;">${f.farmName}</h4>
+          <div style="font-size: 0.8rem; color: var(--fl-text-secondary); margin-bottom: 0.75rem;">${f.name} • ${f.location}</div>
+          <a href="farmer-profile.html?id=${f.id}" class="fl-btn fl-btn-secondary fl-btn-sm" style="width: 100%;">
+            View Crops & Order
+          </a>
+        </div>
+      `).join('');
+    }
+
+    function openCreateSubModal() {
+      document.getElementById('create-sub-modal').classList.add('active');
+    }
+
+    function closeCreateSubModal() {
+      document.getElementById('create-sub-modal').classList.remove('active');
+    }
+
+    function submitNewSubscription(e) {
+      e.preventDefault();
+      const newSub = {
+        buyerId: "B01",
+        businessName: "Resto Nusantara Gourmet",
+        title: document.getElementById('sub-title').value,
+        schedule: document.getElementById('sub-schedule').value,
+        timeSlot: "05:30 - 07:30 WIB",
+        items: [
+          { name: "Selected Produce", qty: parseInt(document.getElementById('sub-qty').value), unit: "kg" }
+        ],
+        nextDelivery: "Upcoming Monday",
+        autoRenewal: true
+      };
+      window.store.createSubscription(newSub);
+      closeCreateSubModal();
+      FarmlinkToast.show("Subscription activated! Recurring order created.", "success");
+      loadBuyerDashboard();
+    }
+
+    function toggleSub(id) {
+      const sub = window.store.toggleSubscription(id);
+      FarmlinkToast.show(`Subscription status set to: ${sub.status}`, "info");
+      loadBuyerDashboard();
+    }
+  </script>
+</body>
+</html>
+

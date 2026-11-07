@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FARMLINK – Connecting Farms. Growing Businesses.</title>
+  
+  <!-- Apple iOS Mobile Web App Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#16834A" />
+
+  <!-- Bootstrap Icons & Fonts -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  
+  <!-- Farmlink Design System -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  
+  <style>
+    /* Hero section styles */
+    .fl-hero-section {
+      position: relative;
+      background: linear-gradient(rgba(16, 92, 55, 0.78), rgba(16, 92, 55, 0.88)), 
+                  url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+      color: #FFFFFF;
+      padding: 5rem 1.5rem 6.5rem 1.5rem;
+      border-radius: 0 0 var(--fl-radius-xl) var(--fl-radius-xl);
+      text-align: center;
+      overflow: hidden;
+    }
+    .fl-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      padding: 0.4rem 1rem;
+      border-radius: var(--fl-radius-pill);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .fl-hero-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      max-width: 820px;
+      margin: 0 auto 1.25rem auto;
+    }
+    @media (min-width: 768px) {
+      .fl-hero-title { font-size: 3.5rem; }
+    }
+    .fl-hero-subtitle {
+      font-size: 1.1rem;
+      max-width: 680px;
+      margin: 0 auto 2.25rem auto;
+      color: #E2F4E9;
+      line-height: 1.6;
+    }
+    .fl-stats-floating {
+      max-width: 1140px;
+      margin: -3.5rem auto 3rem auto;
+      padding: 0 1rem;
+      position: relative;
+      z-index: 10;
+    }
+    /* Wholesale price ticker */
+    .fl-ticker-bar {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--fl-border);
+      padding: 0.65rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .fl-ticker-track {
+      display: inline-flex;
+      gap: 2.5rem;
+      animation: tickerSlide 35s linear infinite;
+    }
+    @keyframes tickerSlide {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="fl-navbar">
+    <div class="fl-nav-container">
+      <a href="index.html" class="fl-logo">
+        <div class="fl-logo-icon">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <span>FARMLINK</span>
+      </a>
+
+      <ul class="fl-nav-links">
+        <li><a href="index.html" class="fl-nav-link active">Home</a></li>
+        <li><a href="marketplace.html" class="fl-nav-link">Explore Products</a></li>
+        <li><a href="farms-map.html" class="fl-nav-link">Nearby Farms</a></li>
+        <li><a href="traceability.html" class="fl-nav-link">Traceability QR</a></li>
+        <li><a href="#how-it-works" class="fl-nav-link">How It Works</a></li>
+        <li><a href="#about-us" class="fl-nav-link">About Us</a></li>
+      </ul>
+
+      <div class="fl-nav-actions">
+        <a href="#" class="fl-btn-icon open-cart-btn" title="Shopping Cart">
+          <i class="bi bi-cart3"></i>
+          <span class="fl-badge-count cart-badge-count" style="display:none;">0</span>
+        </a>
+        <a href="auth.html" class="fl-btn fl-btn-outline fl-btn-sm" style="display:none; @media(min-width:640px){display:inline-flex;}">Login</a>
+        <a href="marketplace.html" class="fl-btn fl-btn-primary fl-btn-sm">Order Wholesale</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Wholesale Price Index Ticker -->
+  <div class="fl-ticker-bar">
+    <div class="fl-ticker-track">
+      <span style="font-size:0.85rem; font-weight:600; color:var(--fl-text-secondary);">
+        🌿 <strong style="color:var(--fl-primary-dark);">TODAY'S FARM GATE PRICE INDEX:</strong>
+      </span>
+      <span style="font-size:0.85rem; font-weight:600;">Organic Romaine: <strong style="color:var(--fl-primary);">Rp 18.000/kg</strong> (Lembang)</span>
+      <span style="font-size:0.85rem; font-weight:600;">Fresh Tomatoes: <strong style="color:var(--fl-primary);">Rp 12.000/kg</strong> (Cianjur)</span>
+      <span style="font-size:0.85rem; font-weight:600;">Cabe Merah Keriting: <strong style="color:var(--fl-primary);">Rp 35.000/kg</strong> (Subang)</span>
+      <span style="font-size:0.85rem; font-weight:600;">Kentang Granola: <strong style="color:var(--fl-primary);">Rp 16.000/kg</strong> (Pangalengan)</span>
+      <span style="font-size:0.85rem; font-weight:600;">Timun Kyuri Hidroponik: <strong style="color:var(--fl-primary);">Rp 9.000/kg</strong> (Sukabumi)</span>
+      <span style="font-size:0.85rem; font-weight:600;">Wortel Manis: <strong style="color:var(--fl-primary);">Rp 14.000/kg</strong> (Pangalengan)</span>
+      <!-- Loop repeat for smooth marquee -->
+      <span style="font-size:0.85rem; font-weight:600;">Organic Romaine: <strong style="color:var(--fl-primary);">Rp 18.000/kg</strong> (Lembang)</span>
+      <span style="font-size:0.85rem; font-weight:600;">Fresh Tomatoes: <strong style="color:var(--fl-primary);">Rp 12.000/kg</strong> (Cianjur)</span>
+      <span style="font-size:0.85rem; font-weight:600;">Cabe Merah Keriting: <strong style="color:var(--fl-primary);">Rp 35.000/kg</strong> (Subang)</span>
+      <span style="font-size:0.85rem; font-weight:600;">Kentang Granola: <strong style="color:var(--fl-primary);">Rp 16.000/kg</strong> (Pangalengan)</span>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="fl-hero-section">
+    <div style="max-width: 960px; margin: 0 auto;">
+      <div class="fl-hero-badge">
+        <i class="bi bi-shield-check"></i>
+        <span>Zero Middlemen • 100% Farm-Gate Transparency • Cold-Chain Guaranteed</span>
+      </div>
+      <h1 class="fl-hero-title">
+        Fresh From Farms.<br />Directly to Your Business.
+      </h1>
+      <p class="fl-hero-subtitle">
+        Connect directly with verified local farmers, source fresher agricultural produce at wholesale prices, and build a transparent, sustainable food supply chain.
+      </p>
+
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="marketplace.html" class="fl-btn fl-btn-primary fl-btn-lg">
+          <i class="bi bi-shop"></i> Explore Fresh Produce
+        </a>
+        <a href="auth.html?role=farmer" class="fl-btn fl-btn-outline fl-btn-lg" style="color: #FFFFFF; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.12); backdrop-filter: blur(10px);">
+          <i class="bi bi-person-plus"></i> Join as a Farmer
+        </a>
+        <a href="farms-map.html" class="fl-btn fl-btn-secondary fl-btn-lg">
+          <i class="bi bi-map"></i> View Farm Map
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Stats Highlights -->
+  <div class="fl-stats-floating">
+    <div class="fl-grid-4">
+      <div class="fl-stat-card">
+        <div class="fl-stat-icon fl-stat-green">
+          <i class="bi bi-patch-check"></i>
+        </div>
+        <div>
+          <div class="fl-stat-number">580+</div>
+          <div class="fl-stat-label">Verified Farms</div>
+        </div>
+      </div>
+      <div class="fl-stat-card">
+        <div class="fl-stat-icon fl-stat-blue">
+          <i class="bi bi-truck"></i>
+        </div>
+        <div>
+          <div class="fl-stat-number">1,420 Tons</div>
+          <div class="fl-stat-label">Harvest Delivered</div>
+        </div>
+      </div>
+      <div class="fl-stat-card">
+        <div class="fl-stat-icon fl-stat-amber">
+          <i class="bi bi-buildings"></i>
+        </div>
+        <div>
+          <div class="fl-stat-number">320+</div>
+          <div class="fl-stat-label">Restaurants & Hotels</div>
+        </div>
+      </div>
+      <div class="fl-stat-card">
+        <div class="fl-stat-icon fl-stat-green">
+          <i class="bi bi-lightning-charge"></i>
+        </div>
+        <div>
+          <div class="fl-stat-number">&lt; 4.5 Jam</div>
+          <div class="fl-stat-label">Harvest-to-Kitchen Slot</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Fresh Produce Section -->
+  <section class="fl-container" style="padding-top: 1rem;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="font-size: 0.85rem; font-weight: 700; color: var(--fl-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">
+          🌱 Freshly Harvested Today
+        </div>
+        <h2 style="font-size: 2rem; font-weight: 800; color: var(--fl-primary-dark); line-height: 1.2;">
+          Featured Farm Harvests
+        </h2>
+        <p style="color: var(--fl-text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">
+          Inspected, certified origin, and packed in temperature-controlled cold crates.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <a href="marketplace.html" class="fl-btn fl-btn-secondary fl-btn-sm">
+          View All 40+ Products <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Product Cards Grid (Injected dynamically from store) -->
+    <div id="featured-products-grid" class="fl-grid-4"></div>
+  </section>
+
+  <!-- Interactive ROI Cost Savings Calculator for Businesses -->
+  <section style="background: var(--fl-primary-subtle); padding: 4rem 1.5rem; border-top: 1px solid var(--fl-primary-border); border-bottom: 1px solid var(--fl-primary-border); margin: 3rem 0;">
+    <div class="fl-container" style="padding: 0;">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: center;" class="lg:grid-cols-2">
+        <div>
+          <span class="fl-badge fl-badge-verified" style="margin-bottom: 0.85rem;">
+            <i class="bi bi-calculator"></i> B2B Direct Procurement Advantage
+          </span>
+          <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--fl-primary-dark); line-height: 1.2; margin-bottom: 1rem;">
+            Calculate How Much Your Business Saves vs Middlemen
+          </h2>
+          <p style="color: var(--fl-text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">
+            Traditional agricultural supply chains pass through 4 to 5 tiers of brokers and wholesale market intermediaries. Farmlink cuts waste, pays farmers 35% higher prices, while saving your restaurant 20-30% on fresh produce costs.
+          </p>
+
+          <div style="background: #FFFFFF; padding: 1.5rem; border-radius: var(--fl-radius-lg); border: 1px solid var(--fl-border); margin-bottom: 1.5rem;">
+            <label class="fl-label" style="display:flex; justify-content:space-between;">
+              <span>Your Estimated Monthly Produce Volume (kg):</span>
+              <strong id="calc-volume-label" style="color:var(--fl-primary-dark); font-size:1.1rem;">500 kg / month</strong>
+            </label>
+            <input type="range" id="calc-volume-slider" min="100" max="3000" step="50" value="500" style="width: 100%; accent-color: var(--fl-primary); cursor: pointer;" oninput="updateCalculator(this.value)" />
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--fl-text-muted); margin-top:0.35rem;">
+              <span>100 kg (Small Cafe)</span>
+              <span>1,500 kg (Restaurant)</span>
+              <span>3,000 kg+ (Hotel/Chain)</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; border-radius: var(--fl-radius-xl); padding: 2rem; border: 1px solid var(--fl-border); box-shadow: var(--fl-shadow-md);">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--fl-text-secondary); text-transform: uppercase;">
+            Monthly Cost Projection
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.25rem 0; padding-bottom: 1.25rem; border-bottom: 1px dashed var(--fl-border);">
+            <div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-muted);">Traditional Market Cost</div>
+              <div id="calc-traditional-cost" style="font-size: 1.35rem; font-weight: 700; color: #94A3B8; text-decoration: line-through;">Rp 12.500.000</div>
+            </div>
+            <div>
+              <div style="font-size: 0.8rem; color: var(--fl-primary);">Farmlink Direct Cost</div>
+              <div id="calc-farmlink-cost" style="font-size: 1.5rem; font-weight: 800; color: var(--fl-primary-dark);">Rp 9.750.000</div>
+            </div>
+          </div>
+
+          <div style="background: var(--fl-primary-light); border-radius: var(--fl-radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+            <div style="font-size: 0.85rem; font-weight: 600; color: var(--fl-primary-dark);">
+              Estimated Annual Savings:
+            </div>
+            <div id="calc-annual-savings" style="font-size: 2rem; font-weight: 900; color: var(--fl-primary); margin-top: 0.2rem;">
+              Rp 33.000.000 / Year
+            </div>
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary); margin-top: 0.35rem;">
+              Plus: 0% spoilage guarantee & QR batch origin traceability included.
+            </div>
+          </div>
+
+          <a href="auth.html?role=buyer" class="fl-btn fl-btn-primary" style="width: 100%; border-radius: var(--fl-radius-pill);">
+            Start Saving with Business Account <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How Farmlink Works Section -->
+  <section id="how-it-works" class="fl-container">
+    <div style="text-align: center; max-width: 700px; margin: 0 auto 3rem auto;">
+      <span class="fl-badge fl-badge-organic" style="margin-bottom: 0.5rem;">
+        Simple & Reliable B2B Logistics
+      </span>
+      <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--fl-primary-dark);">
+        How Farmlink Works
+      </h2>
+      <p style="color: var(--fl-text-secondary); font-size: 1rem; margin-top: 0.5rem;">
+        A transparent farm-to-door ecosystem engineered specifically for commercial food businesses.
+      </p>
+
+      <!-- Segmented Tab for Buyer vs Farmer view -->
+      <div style="margin-top: 1.5rem;">
+        <div class="fl-segmented">
+          <button class="fl-segmented-item active" onclick="switchWorkflowTab('buyer')">For Restaurants & Buyers</button>
+          <button class="fl-segmented-item" onclick="switchWorkflowTab('farmer')">For Farmers & Producers</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buyer Workflow View -->
+    <div id="workflow-buyer" class="fl-grid-3">
+      <div class="fl-card" style="padding: 1.75rem;">
+        <div style="width: 52px; height: 52px; background: var(--fl-primary-light); color: var(--fl-primary-dark); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+          <i class="bi bi-search"></i>
+        </div>
+        <div style="font-size: 0.8rem; font-weight: 800; color: var(--fl-primary); margin-bottom: 0.35rem;">STEP 01</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.65rem;">Explore & Filter Harvests</h3>
+        <p style="color: var(--fl-text-secondary); font-size: 0.925rem; line-height: 1.55;">
+          Search real available stock by harvest date, organic certification, and farm location in West Java. Lock in wholesale tier prices.
+        </p>
+      </div>
+
+      <div class="fl-card" style="padding: 1.75rem;">
+        <div style="width: 52px; height: 52px; background: var(--fl-primary-light); color: var(--fl-primary-dark); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+          <i class="bi bi-calendar2-check"></i>
+        </div>
+        <div style="font-size: 0.8rem; font-weight: 800; color: var(--fl-primary); margin-bottom: 0.35rem;">STEP 02</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.65rem;">Schedule or Subscribe</h3>
+        <p style="color: var(--fl-text-secondary); font-size: 0.925rem; line-height: 1.55;">
+          Choose your exact kitchen delivery window (05:00 - 08:00 AM) or automate weekly deliveries for staples like tomatoes and greens.
+        </p>
+      </div>
+
+      <div class="fl-card" style="padding: 1.75rem;">
+        <div style="width: 52px; height: 52px; background: var(--fl-primary-light); color: var(--fl-primary-dark); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+          <i class="bi bi-qr-code-scan"></i>
+        </div>
+        <div style="font-size: 0.8rem; font-weight: 800; color: var(--fl-primary); margin-bottom: 0.35rem;">STEP 03</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.65rem;">Refrigerated Delivery & QR Scan</h3>
+        <p style="color: var(--fl-text-secondary); font-size: 0.925rem; line-height: 1.55;">
+          Direct cold-chain truck delivery with QR batch code. Scan to verify harvest time, pesticide lab results, and farm origin.
+        </p>
+      </div>
+    </div>
+
+    <!-- Farmer Workflow View (hidden initially) -->
+    <div id="workflow-farmer" class="fl-grid-3" style="display: none;">
+      <div class="fl-card" style="padding: 1.75rem;">
+        <div style="width: 52px; height: 52px; background: var(--fl-accent-blue-light); color: var(--fl-accent-blue); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+          <i class="bi bi-cloud-arrow-up"></i>
+        </div>
+        <div style="font-size: 0.8rem; font-weight: 800; color: var(--fl-accent-blue); margin-bottom: 0.35rem;">STEP 01</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.65rem;">List Upcoming Harvest</h3>
+        <p style="color: var(--fl-text-secondary); font-size: 0.925rem; line-height: 1.55;">
+          Input expected yield (kg/ton), your farm gate price, harvest date, and upload real photos. No technical complexity required.
+        </p>
+      </div>
+
+      <div class="fl-card" style="padding: 1.75rem;">
+        <div style="width: 52px; height: 52px; background: var(--fl-accent-blue-light); color: var(--fl-accent-blue); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+          <i class="bi bi-bell"></i>
+        </div>
+        <div style="font-size: 0.8rem; font-weight: 800; color: var(--fl-accent-blue); margin-bottom: 0.35rem;">STEP 02</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.65rem;">Accept Confirmed POs</h3>
+        <p style="color: var(--fl-text-secondary); font-size: 0.925rem; line-height: 1.55;">
+          Receive direct orders from reputable restaurants and supermarkets. Harvest only what is pre-sold at guaranteed fair prices.
+        </p>
+      </div>
+
+      <div class="fl-card" style="padding: 1.75rem;">
+        <div style="width: 52px; height: 52px; background: var(--fl-accent-blue-light); color: var(--fl-accent-blue); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+          <i class="bi bi-wallet2"></i>
+        </div>
+        <div style="font-size: 0.8rem; font-weight: 800; color: var(--fl-accent-blue); margin-bottom: 0.35rem;">STEP 03</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.65rem;">Direct Payouts in 24 Hours</h3>
+        <p style="color: var(--fl-text-secondary); font-size: 0.925rem; line-height: 1.55;">
+          Farmlink couriers pick up directly from your farm gate. Payment is deposited directly to your bank account with zero fee deductions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verified Local Farmers Showcase -->
+  <section class="fl-container" style="padding-top: 3.5rem;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="font-size: 0.85rem; font-weight: 700; color: var(--fl-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">
+          🤝 Verified Producers
+        </div>
+        <h2 style="font-size: 2rem; font-weight: 800; color: var(--fl-primary-dark); line-height: 1.2;">
+          Meet Our Local Farmers
+        </h2>
+        <p style="color: var(--fl-text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">
+          Every farm is physically inspected, soil-tested, and audited for sustainable cultivation standards.
+        </p>
+      </div>
+
+      <a href="farms-map.html" class="fl-btn fl-btn-outline fl-btn-sm">
+        Explore Nearby Farm Map <i class="bi bi-compass"></i>
+      </a>
+    </div>
+
+    <!-- Farmer Cards Grid -->
+    <div id="verified-farmers-grid" class="fl-grid-3"></div>
+  </section>
+
+  <!-- Farmer & Buyer Testimonials -->
+  <section style="background: #FFFFFF; padding: 4rem 1.5rem; border-top: 1px solid var(--fl-border); margin-top: 4rem;">
+    <div class="fl-container" style="padding: 0;">
+      <div style="text-align: center; max-width: 650px; margin: 0 auto 3rem auto;">
+        <span class="fl-badge fl-badge-verified">Real Stories from the Field</span>
+        <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--fl-primary-dark); margin-top: 0.5rem;">
+          Trusted by Farmers & Top Chefs
+        </h2>
+      </div>
+
+      <div class="fl-grid-3">
+        <!-- Testimonial 1 -->
+        <div class="fl-card" style="padding: 1.75rem; border-color: var(--fl-border-light);">
+          <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1rem;">
+            <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=120&q=80" alt="Chef Dewa" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" />
+            <div>
+              <div style="font-weight: 700; color: var(--fl-text);">Chef Dewa Santika</div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">Executive Chef • Resto Nusantara Bandung</div>
+            </div>
+          </div>
+          <div style="color: #F59E0B; font-size: 0.9rem; margin-bottom: 0.75rem;">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+          </div>
+          <p style="font-size: 0.925rem; color: var(--fl-text); line-height: 1.6; font-style: italic;">
+            "Before Farmlink, lettuce and herbs arriving from wholesale markets were wilted by mid-day. Now with Pak Asep's direct cold harvest delivery, produce freshness lasts double the time, and our kitchen costs dropped 24%."
+          </p>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="fl-card" style="padding: 1.75rem; border-color: var(--fl-border-light);">
+          <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1rem;">
+            <img src="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=120&q=80" alt="Pak Asep" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" />
+            <div>
+              <div style="font-weight: 700; color: var(--fl-text);">Pak Asep Kurniawan</div>
+              <div style="font-size: 0.8rem; color: var(--fl-primary-dark); font-weight:600;">Petani Lembang • Kebun Pasir Wangi</div>
+            </div>
+          </div>
+          <div style="color: #F59E0B; font-size: 0.9rem; margin-bottom: 0.75rem;">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+          </div>
+          <p style="font-size: 0.925rem; color: var(--fl-text); line-height: 1.6; font-style: italic;">
+            "Dulu harga selada ditekan tengkulak hingga Rp 8.000/kg. Melalui Farmlink, kami jual langsung ke hotel seharga Rp 18.000/kg. Pembayaran pasti cair 24 jam setelah kurir mengambil barang di kebun."
+          </p>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="fl-card" style="padding: 1.75rem; border-color: var(--fl-border-light);">
+          <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1rem;">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80" alt="Ibu Siti" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" />
+            <div>
+              <div style="font-weight: 700; color: var(--fl-text);">Ibu Siti Rahmawati</div>
+              <div style="font-size: 0.8rem; color: var(--fl-primary-dark); font-weight:600;">Barokah Tani Makmur • Pangalengan</div>
+            </div>
+          </div>
+          <div style="color: #F59E0B; font-size: 0.9rem; margin-bottom: 0.75rem;">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+          </div>
+          <p style="font-size: 0.925rem; color: var(--fl-text); line-height: 1.6; font-style: italic;">
+            "Fitur QR Code Traceability membuat hasil kentang dan wortel kami diakui sebagai produk bersertifikat. Pembeli supermarket besar tidak ragu lagi memesan 2 ton setiap minggu secara langganan."
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Banner -->
+  <section class="fl-container" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <div style="background: linear-gradient(135deg, var(--fl-primary-dark), #0B4226); border-radius: var(--fl-radius-xl); padding: 3.5rem 2rem; color: #FFFFFF; text-align: center; position: relative; overflow: hidden; box-shadow: var(--fl-shadow-lg);">
+      <div style="position: absolute; right: -40px; bottom: -40px; font-size: 14rem; opacity: 0.05; pointer-events: none;">
+        <i class="bi bi-tree"></i>
+      </div>
+      <div style="max-width: 680px; margin: 0 auto; position: relative; z-index: 2;">
+        <span class="fl-badge" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 1rem;">
+          🚀 Join 900+ Agricultural Leaders
+        </span>
+        <h2 style="font-size: 2.3rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;">
+          Ready to Modernize Your Fresh Food Supply Chain?
+        </h2>
+        <p style="color: #D2F0DE; font-size: 1.05rem; margin-bottom: 2rem;">
+          Sign up today as a business buyer or verified farmer. Get wholesale prices, guaranteed cold logistics, and full traceability.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="auth.html?role=buyer" class="fl-btn fl-btn-primary fl-btn-lg" style="background: #FFFFFF; color: var(--fl-primary-dark);">
+            Create Business Account
+          </a>
+          <a href="auth.html?role=farmer" class="fl-btn fl-btn-outline fl-btn-lg" style="color: #FFFFFF; border-color: rgba(255,255,255,0.4);">
+            Register Farm
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="about-us" style="background: #102116; color: #CBD5E1; padding: 4rem 1.5rem 2.5rem 1.5rem; font-size: 0.9rem;">
+    <div class="fl-container" style="padding: 0;">
+      <div class="fl-grid-4" style="margin-bottom: 3rem;">
+        <div>
+          <div class="fl-logo" style="color: #FFFFFF; margin-bottom: 1rem;">
+            <div class="fl-logo-icon" style="background: #16834A;">
+              <i class="bi bi-flower1"></i>
+            </div>
+            <span>FARMLINK</span>
+          </div>
+          <p style="color: #94A3B8; font-size: 0.85rem; line-height: 1.6; margin-bottom: 1.25rem;">
+            Farmlink is Indonesia's premier agricultural B2B technology platform connecting verified growers with commercial food businesses.
+          </p>
+          <div style="display: flex; gap: 0.75rem;">
+            <a href="#" style="color:#A7F3D0; font-size:1.2rem;"><i class="bi bi-instagram"></i></a>
+            <a href="#" style="color:#A7F3D0; font-size:1.2rem;"><i class="bi bi-linkedin"></i></a>
+            <a href="#" style="color:#A7F3D0; font-size:1.2rem;"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="color: #FFFFFF; font-weight: 700; margin-bottom: 1rem;">Marketplace</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem;">
+            <li><a href="marketplace.html" style="color: #94A3B8;">All Wholesale Produce</a></li>
+            <li><a href="marketplace.html?category=Organic" style="color: #94A3B8;">Organic Certified</a></li>
+            <li><a href="marketplace.html?category=Leafy+Greens" style="color: #94A3B8;">Hydroponic Greens</a></li>
+            <li><a href="farms-map.html" style="color: #94A3B8;">Interactive Farm Map</a></li>
+            <li><a href="traceability.html" style="color: #94A3B8;">QR Batch Traceability</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="color: #FFFFFF; font-weight: 700; margin-bottom: 1rem;">Solutions</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem;">
+            <li><a href="buyer-dashboard.html" style="color: #94A3B8;">For Restaurants & Hotels</a></li>
+            <li><a href="farmer-dashboard.html" style="color: #94A3B8;">For Farmers & Co-ops</a></li>
+            <li><a href="admin-dashboard.html" style="color: #94A3B8;">Admin Oversight Portal</a></li>
+            <li><a href="cart-checkout.html" style="color: #94A3B8;">Cold Chain Delivery</a></li>
+            <li><a href="order-tracking.html" style="color: #94A3B8;">Live Order Tracker</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="color: #FFFFFF; font-weight: 700; margin-bottom: 1rem;">Headquarters & Contact</h4>
+          <p style="color: #94A3B8; font-size: 0.85rem; line-height: 1.6; margin-bottom: 0.5rem;">
+            <strong>Farmlink Agri-Tech Hub</strong><br />
+            Jl. Ir. H. Juanda No. 108, Dago, Bandung 40132, Jawa Barat
+          </p>
+          <p style="color: #94A3B8; font-size: 0.85rem;">
+            Email: <a href="mailto:support@farmlink.id" style="color: #A7F3D0;">support@farmlink.id</a><br />
+            WhatsApp: +62 811-2345-6789
+          </p>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; font-size: 0.8rem; color: #64748B;">
+        <div>&copy; 2026 Farmlink Indonesia (PT Farmlink Agri Nusantara). All rights reserved.</div>
+        <div style="display: flex; gap: 1.25rem;">
+          <a href="#" style="color: #64748B;">Privacy Policy</a>
+          <a href="#" style="color: #64748B;">Terms of Supply</a>
+          <a href="#" style="color: #64748B;">Quality Standards</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLandingProducts();
+      renderLandingFarmers();
+    });
+
+    function renderLandingProducts() {
+      const grid = document.getElementById('featured-products-grid');
+      if (!grid) return;
+      const products = window.store.getProducts().slice(0, 8);
+
+      grid.innerHTML = products.map(p => `
+        <div class="fl-product-card">
+          <div class="fl-product-image-wrap">
+            <img src="${p.image}" alt="${p.name}" class="fl-product-image" loading="lazy" />
+            <div class="fl-product-badges">
+              <span class="fl-badge ${p.farmingMethod === 'Organic' ? 'fl-badge-organic' : 'fl-badge-pesticide-free'}">
+                ${p.verificationBadge}
+              </span>
+            </div>
+            <button class="fl-product-fav" onclick="toggleFav(this, '${p.id}')">
+              <i class="bi bi-heart"></i>
+            </button>
+          </div>
+          <div class="fl-product-content">
+            <div class="fl-product-category">${p.category}</div>
+            <a href="product-detail.html?id=${p.id}" class="fl-product-title">${p.name}</a>
+            <div class="fl-product-farmer">
+              <i class="bi bi-geo-alt-fill" style="color:var(--fl-primary); font-size:0.75rem;"></i>
+              <a href="farmer-profile.html?id=${p.farmerId}">${p.farmerName}</a> • ${p.location.split(',')[0]}
+            </div>
+            
+            <div class="fl-product-meta">
+              <span><i class="bi bi-calendar3"></i> Harvest: ${p.harvestDate}</span>
+              <span><i class="bi bi-box-seam"></i> ${p.availableStock} kg</span>
+            </div>
+
+            <div class="fl-product-price-row">
+              <div>
+                <div class="fl-price-amount">${formatRupiah(p.price)}</div>
+                <div class="fl-price-unit">per ${p.unit} (Min. ${p.minOrder} kg)</div>
+              </div>
+              <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="FarmlinkApp.quickAddToCart('${p.id}', ${p.minOrder})">
+                <i class="bi bi-plus-lg"></i> Add
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderLandingFarmers() {
+      const grid = document.getElementById('verified-farmers-grid');
+      if (!grid) return;
+      const farmers = window.store.getFarmers().slice(0, 3);
+
+      grid.innerHTML = farmers.map(f => `
+        <div class="fl-farmer-card">
+          <div class="fl-farmer-cover" style="background-image: url('${f.coverImage}');"></div>
+          <div class="fl-farmer-avatar-wrap">
+            <img src="${f.avatar}" alt="${f.name}" class="fl-farmer-avatar" />
+            <span class="fl-badge fl-badge-verified">
+              <i class="bi bi-patch-check-fill"></i> ${f.verificationStatus}
+            </span>
+          </div>
+          <div class="fl-farmer-info">
+            <h3 class="fl-farmer-name">${f.name}</h3>
+            <div class="fl-farmer-farm">${f.farmName}</div>
+            <div class="fl-farmer-location">
+              <i class="bi bi-geo-alt"></i> ${f.location} • ${f.farmSize}
+            </div>
+            <p style="font-size:0.85rem; color:var(--fl-text-secondary); line-height:1.5; margin-bottom:1rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+              ${f.story}
+            </p>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-top:0.75rem; border-top:1px solid var(--fl-border-light);">
+              <div style="font-size:0.825rem; font-weight:700; color:var(--fl-text);">
+                ⭐ ${f.rating} <span style="font-weight:400; color:var(--fl-text-muted);">(${f.reviewCount} orders)</span>
+              </div>
+              <a href="farmer-profile.html?id=${f.id}" class="fl-btn fl-btn-secondary fl-btn-sm">
+                View Farm & Crops <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchWorkflowTab(type) {
+      document.querySelectorAll('.fl-segmented-item').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      if (type === 'buyer') {
+        document.getElementById('workflow-buyer').style.display = 'grid';
+        document.getElementById('workflow-farmer').style.display = 'none';
+      } else {
+        document.getElementById('workflow-buyer').style.display = 'none';
+        document.getElementById('workflow-farmer').style.display = 'grid';
+      }
+    }
+
+    function updateCalculator(volume) {
+      document.getElementById('calc-volume-label').textContent = `${volume} kg / month`;
+      const avgTraditionalPrice = 25000;
+      const avgFarmlinkPrice = 19500;
+      
+      const traditionalTotal = volume * avgTraditionalPrice;
+      const farmlinkTotal = volume * avgFarmlinkPrice;
+      const monthlySavings = traditionalTotal - farmlinkTotal;
+      const annualSavings = monthlySavings * 12;
+
+      document.getElementById('calc-traditional-cost').textContent = formatRupiah(traditionalTotal);
+      document.getElementById('calc-farmlink-cost').textContent = formatRupiah(farmlinkTotal);
+      document.getElementById('calc-annual-savings').textContent = `${formatRupiah(annualSavings)} / Year`;
+    }
+
+    function toggleFav(btn, id) {
+      btn.classList.toggle('active');
+      FarmlinkToast.show(btn.classList.contains('active') ? "Saved to your favorites!" : "Removed from favorites", "info");
+    }
+  </script>
+</body>
+</html>
+

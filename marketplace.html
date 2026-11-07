@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Wholesale Produce Marketplace – FARMLINK</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#16834A" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  
+  <style>
+    .market-filter-pill {
+      padding: 0.45rem 1.15rem;
+      border-radius: var(--fl-radius-pill);
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: #FFFFFF;
+      border: 1px solid var(--fl-border);
+      color: var(--fl-text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--fl-transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .market-filter-pill:hover, .market-filter-pill.active {
+      background: var(--fl-primary);
+      color: #FFFFFF;
+      border-color: var(--fl-primary);
+      box-shadow: 0 2px 8px rgba(22, 131, 74, 0.25);
+    }
+    .filter-sidebar {
+      background: #FFFFFF;
+      border-radius: var(--fl-radius-xl);
+      border: 1px solid var(--fl-border);
+      padding: 1.5rem;
+      position: sticky;
+      top: 80px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="fl-navbar">
+    <div class="fl-nav-container">
+      <a href="index.html" class="fl-logo">
+        <div class="fl-logo-icon">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <span>FARMLINK</span>
+      </a>
+
+      <ul class="fl-nav-links">
+        <li><a href="index.html" class="fl-nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="fl-nav-link active">Explore Products</a></li>
+        <li><a href="farms-map.html" class="fl-nav-link">Nearby Farms</a></li>
+        <li><a href="traceability.html" class="fl-nav-link">Traceability QR</a></li>
+        <li><a href="buyer-dashboard.html" class="fl-nav-link">Buyer Dashboard</a></li>
+      </ul>
+
+      <div class="fl-nav-actions">
+        <a href="#" class="fl-btn-icon open-cart-btn" title="Shopping Cart">
+          <i class="bi bi-cart3"></i>
+          <span class="fl-badge-count cart-badge-count" style="display:none;">0</span>
+        </a>
+        <a href="buyer-dashboard.html" class="fl-btn fl-btn-secondary fl-btn-sm">
+          <i class="bi bi-person-circle"></i> Portal
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Marketplace Header & Search -->
+  <section style="background: #FFFFFF; border-bottom: 1px solid var(--fl-border); padding: 2rem 1.5rem;">
+    <div class="fl-container" style="padding: 0;">
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div>
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--fl-primary); text-transform: uppercase;">
+            Direct-From-Farm Sourcing
+          </div>
+          <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--fl-primary-dark); line-height: 1.2;">
+            B2B Produce Marketplace
+          </h1>
+          <p style="color: var(--fl-text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">
+            Order fresh wholesale agricultural crops directly from verified West Java producers.
+          </p>
+        </div>
+
+        <!-- Search Bar and Sorting Toolbar -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+          <div style="flex: 1; min-width: 280px; position: relative;">
+            <i class="bi bi-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--fl-text-muted);"></i>
+            <input type="text" id="market-search" class="fl-input" placeholder="Search tomatoes, romaine lettuce, chillies, potatoes, farm..." style="padding-left: 2.75rem; border-radius: var(--fl-radius-pill);" oninput="applyMarketFilters()" />
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <select id="market-sort" class="fl-select" style="width: auto; border-radius: var(--fl-radius-pill); font-size: 0.9rem;" onchange="applyMarketFilters()">
+              <option value="featured">Featured Harvests</option>
+              <option value="price_asc">Price: Lowest to Highest</option>
+              <option value="price_desc">Price: Highest to Lowest</option>
+              <option value="harvest_new">Newest Harvest Date</option>
+              <option value="rating_desc">Highest Customer Rating</option>
+            </select>
+
+            <button class="fl-btn fl-btn-outline fl-btn-sm" onclick="resetFilters()">
+              <i class="bi bi-arrow-counterclockwise"></i> Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Horizontal Filter Pills -->
+        <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; -webkit-overflow-scrolling: touch;">
+          <button class="market-filter-pill active" onclick="setCategoryFilter('all', this)">
+            <i class="bi bi-grid-fill"></i> All Produce
+          </button>
+          <button class="market-filter-pill" onclick="setCategoryFilter('Vegetables', this)">
+            🥦 Vegetables
+          </button>
+          <button class="market-filter-pill" onclick="setCategoryFilter('Leafy Greens', this)">
+            🥬 Leafy Greens
+          </button>
+          <button class="market-filter-pill" onclick="setCategoryFilter('Root Vegetables', this)">
+            🥕 Root Vegetables
+          </button>
+          <button class="market-filter-pill" onclick="setCategoryFilter('Fruits', this)">
+            🍅 Fruits
+          </button>
+          <button class="market-filter-pill" onclick="setCategoryFilter('Herbs', this)">
+            🌿 Herbs
+          </button>
+          <button class="market-filter-pill" onclick="setCategoryFilter('Organic Produce', this)">
+            🍄 Organic Specialties
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marketplace Content Area -->
+  <main class="fl-container">
+    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" class="lg:grid-cols-4">
+      
+      <!-- Filter Sidebar (Desktop) -->
+      <aside style="display: none; @media(min-width: 1024px){display:block;}" id="desktop-filters">
+        <div class="filter-sidebar">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 700;">Filters</h3>
+            <span id="active-filter-count" class="fl-badge fl-badge-verified">All Active</span>
+          </div>
+
+          <!-- Farming Method Filter -->
+          <div class="fl-form-group">
+            <label class="fl-label">Farming Method</label>
+            <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
+                <input type="checkbox" name="method" value="Organic" onchange="applyMarketFilters()" checked />
+                <span>Certified Organic</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
+                <input type="checkbox" name="method" value="Pesticide-Free" onchange="applyMarketFilters()" checked />
+                <span>Pesticide-Free (Prima 2)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
+                <input type="checkbox" name="method" value="Standard Farming" onchange="applyMarketFilters()" checked />
+                <span>Standard GAP Certified</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Origin Regency Filter -->
+          <div class="fl-form-group" style="margin-top: 1.5rem;">
+            <label class="fl-label">Farm Origin Location</label>
+            <select id="origin-filter" class="fl-select" onchange="applyMarketFilters()">
+              <option value="all">All West Java Locations</option>
+              <option value="Lembang">Lembang (Bandung Barat)</option>
+              <option value="Pangalengan">Pangalengan (Kab. Bandung)</option>
+              <option value="Cianjur">Pacet & Cipanas (Cianjur)</option>
+              <option value="Sukabumi">Cicurug (Sukabumi)</option>
+              <option value="Subang">Jalan Cagak (Subang)</option>
+              <option value="Bogor">Megamendung (Bogor)</option>
+            </select>
+          </div>
+
+          <!-- Price Range Slider -->
+          <div class="fl-form-group" style="margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+              <label class="fl-label" style="margin-bottom:0;">Max Price per kg:</label>
+              <span id="price-val" style="font-weight: 700; color: var(--fl-primary-dark); font-size: 0.9rem;">Rp 70.000</span>
+            </div>
+            <input type="range" id="price-slider" min="8000" max="70000" step="2000" value="70000" style="width: 100%; accent-color: var(--fl-primary);" oninput="document.getElementById('price-val').textContent = formatRupiah(this.value); applyMarketFilters();" />
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--fl-text-muted);">
+              <span>Rp 8.000</span>
+              <span>Rp 70.000</span>
+            </div>
+          </div>
+
+          <!-- Only Verified Farms Toggle -->
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--fl-border);">
+            <label style="display: flex; align-items: center; gap: 0.65rem; font-size: 0.9rem; font-weight: 600; cursor: pointer;">
+              <input type="checkbox" id="verified-only" onchange="applyMarketFilters()" checked style="width:18px; height:18px; accent-color:var(--fl-primary);" />
+              <span>Only Verified Farms (SNI/GAP)</span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Products Grid Area -->
+      <section style="grid-column: span 3;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div id="results-count" style="font-size: 0.95rem; font-weight: 600; color: var(--fl-text-secondary);">
+            Showing all fresh harvests
+          </div>
+          <div style="font-size: 0.825rem; color: var(--fl-primary-dark); display: flex; align-items: center; gap: 0.3rem;">
+            <i class="bi bi-thermometer-snow"></i> Refrigerated Cold Chain Active
+          </div>
+        </div>
+
+        <div id="marketplace-products-grid" class="fl-grid-3">
+          <!-- Dynamic cards injected here -->
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div id="marketplace-empty-state" style="display: none; text-align: center; padding: 4rem 1.5rem; background: #FFFFFF; border-radius: var(--fl-radius-xl); border: 1px dashed var(--fl-border);">
+          <div style="width: 64px; height: 64px; background: var(--fl-primary-light); color: var(--fl-primary-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-size: 2rem;">
+            <i class="bi bi-search"></i>
+          </div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">No Produce Found</h3>
+          <p style="color: var(--fl-text-secondary); font-size: 0.95rem; max-width: 450px; margin: 0 auto 1.5rem auto;">
+            We couldn't find any agricultural batches matching your current filter criteria. Try adjusting the category, price, or location.
+          </p>
+          <button class="fl-btn fl-btn-secondary fl-btn-sm" onclick="resetFilters()">
+            Clear All Filters
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let activeCategory = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check URL query parameters for category
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = urlParams.get('category');
+      if (catParam) {
+        activeCategory = catParam;
+        document.querySelectorAll('.market-filter-pill').forEach(btn => {
+          if (btn.textContent.toLowerCase().includes(catParam.toLowerCase())) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      }
+      applyMarketFilters();
+    });
+
+    function setCategoryFilter(category, buttonEl) {
+      activeCategory = category;
+      document.querySelectorAll('.market-filter-pill').forEach(b => b.classList.remove('active'));
+      if (buttonEl) buttonEl.classList.add('active');
+      applyMarketFilters();
+    }
+
+    function resetFilters() {
+      activeCategory = 'all';
+      document.querySelectorAll('.market-filter-pill').forEach(b => b.classList.remove('active'));
+      document.querySelector('.market-filter-pill').classList.add('active');
+      document.getElementById('market-search').value = '';
+      document.getElementById('market-sort').value = 'featured';
+      document.getElementById('origin-filter').value = 'all';
+      document.getElementById('price-slider').value = 70000;
+      document.getElementById('price-val').textContent = 'Rp 70.000';
+      document.querySelectorAll('input[name="method"]').forEach(cb => cb.checked = true);
+      document.getElementById('verified-only').checked = false;
+      applyMarketFilters();
+      FarmlinkToast.show("Filters reset to default view", "info");
+    }
+
+    function applyMarketFilters() {
+      const query = (document.getElementById('market-search').value || '').toLowerCase().trim();
+      const sort = document.getElementById('market-sort').value;
+      const origin = document.getElementById('origin-filter') ? document.getElementById('origin-filter').value : 'all';
+      const maxPrice = document.getElementById('price-slider') ? parseInt(document.getElementById('price-slider').value) : 70000;
+      const verifiedOnly = document.getElementById('verified-only') ? document.getElementById('verified-only').checked : false;
+
+      const checkedMethods = Array.from(document.querySelectorAll('input[name="method"]:checked')).map(cb => cb.value);
+
+      let products = window.store.getProducts();
+
+      // Category filter
+      if (activeCategory !== 'all') {
+        products = products.filter(p => p.category.toLowerCase().includes(activeCategory.toLowerCase()));
+      }
+
+      // Search query filter
+      if (query) {
+        products = products.filter(p => 
+          p.name.toLowerCase().includes(query) || 
+          p.farmerName.toLowerCase().includes(query) || 
+          p.farmName.toLowerCase().includes(query) || 
+          p.location.toLowerCase().includes(query) ||
+          p.category.toLowerCase().includes(query)
+        );
+      }
+
+      // Origin filter
+      if (origin !== 'all') {
+        products = products.filter(p => p.location.toLowerCase().includes(origin.toLowerCase()));
+      }
+
+      // Price filter
+      products = products.filter(p => p.price <= maxPrice);
+
+      // Farming method filter
+      if (checkedMethods.length > 0) {
+        products = products.filter(p => checkedMethods.includes(p.farmingMethod));
+      }
+
+      // Sorting
+      if (sort === 'price_asc') {
+        products.sort((a, b) => a.price - b.price);
+      } else if (sort === 'price_desc') {
+        products.sort((a, b) => b.price - a.price);
+      } else if (sort === 'harvest_new') {
+        products.sort((a, b) => new Date(b.harvestDate) - new Date(a.harvestDate));
+      } else if (sort === 'rating_desc') {
+        products.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      }
+
+      renderProducts(products);
+    }
+
+    function renderProducts(products) {
+      const grid = document.getElementById('marketplace-products-grid');
+      const emptyState = document.getElementById('marketplace-empty-state');
+      const countEl = document.getElementById('results-count');
+
+      countEl.textContent = `Showing ${products.length} fresh produce batches`;
+
+      if (products.length === 0) {
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      grid.style.display = 'grid';
+      emptyState.style.display = 'none';
+
+      grid.innerHTML = products.map(p => `
+        <div class="fl-product-card">
+          <div class="fl-product-image-wrap">
+            <img src="${p.image}" alt="${p.name}" class="fl-product-image" loading="lazy" />
+            <div class="fl-product-badges">
+              <span class="fl-badge ${p.farmingMethod === 'Organic' ? 'fl-badge-organic' : (p.farmingMethod === 'Pesticide-Free' ? 'fl-badge-pesticide-free' : 'fl-badge-standard')}">
+                ${p.verificationBadge}
+              </span>
+            </div>
+            <button class="fl-product-fav" onclick="this.classList.toggle('active');">
+              <i class="bi bi-heart"></i>
+            </button>
+          </div>
+          <div class="fl-product-content">
+            <div class="fl-product-category">${p.category}</div>
+            <a href="product-detail.html?id=${p.id}" class="fl-product-title" title="${p.name}">${p.name}</a>
+            <div class="fl-product-farmer">
+              <i class="bi bi-geo-alt-fill" style="color:var(--fl-primary); font-size:0.75rem;"></i>
+              <a href="farmer-profile.html?id=${p.farmerId}">${p.farmerName}</a> • ${p.location.split(',')[0]}
+            </div>
+            
+            <div class="fl-product-meta">
+              <span><i class="bi bi-calendar-event"></i> Harvest: ${p.harvestDate}</span>
+              <span><i class="bi bi-stack"></i> Stock: <strong>${p.availableStock} kg</strong></span>
+            </div>
+
+            <div class="fl-product-price-row">
+              <div>
+                <div class="fl-price-amount">${formatRupiah(p.price)}</div>
+                <div class="fl-price-unit">per ${p.unit} (Min. ${p.minOrder} kg)</div>
+              </div>
+              <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="FarmlinkApp.quickAddToCart('${p.id}', ${p.minOrder})">
+                <i class="bi bi-cart-plus"></i> Add
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
+

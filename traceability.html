@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Produce Batch QR Traceability – FARMLINK</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#16834A" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <!-- html5-qrcode for real camera scanning -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+  <style>
+    .cert-card {
+      background: #FFFFFF;
+      border-radius: var(--fl-radius-xl);
+      border: 1px solid var(--fl-border);
+      box-shadow: var(--fl-shadow-md);
+      overflow: hidden;
+    }
+    .cert-banner {
+      background: linear-gradient(135deg, #105C37, #16834A);
+      color: #FFFFFF;
+      padding: 2rem;
+      position: relative;
+    }
+    .cert-seal {
+      width: 72px;
+      height: 72px;
+      background: #FFFFFF;
+      color: #16834A;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    #qr-reader {
+      border: none !important;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="fl-navbar">
+    <div class="fl-nav-container">
+      <a href="index.html" class="fl-logo">
+        <div class="fl-logo-icon">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <span>FARMLINK</span>
+      </a>
+
+      <ul class="fl-nav-links">
+        <li><a href="index.html" class="fl-nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="fl-nav-link">Marketplace</a></li>
+        <li><a href="farms-map.html" class="fl-nav-link">Nearby Farms</a></li>
+        <li><a href="traceability.html" class="fl-nav-link active">Traceability QR</a></li>
+      </ul>
+
+      <div class="fl-nav-actions">
+        <a href="marketplace.html" class="fl-btn fl-btn-primary fl-btn-sm">
+          Explore Produce
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="fl-container">
+    
+    <!-- Top Header -->
+    <div style="text-align: center; max-width: 680px; margin: 0 auto 2.5rem auto;">
+      <span class="fl-badge fl-badge-verified" style="margin-bottom: 0.5rem;">
+        <i class="bi bi-shield-check"></i> 100% Cryptographic Farm-to-Table Trust
+      </span>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--fl-primary-dark); line-height: 1.2;">
+        Produce Batch Traceability
+      </h1>
+      <p style="color: var(--fl-text-secondary); font-size: 0.95rem; margin-top: 0.35rem;">
+        Scan crate QR code or select a verified harvest batch below to inspect laboratory pesticide tests, soil origins, and harvesting timestamps.
+      </p>
+
+      <!-- Instant Demo Batch Switcher Pills -->
+      <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--fl-text-muted); align-self: center;">Quick Test Batch:</span>
+        <button class="market-filter-pill active" onclick="loadBatch('BATCH-ROM-2026-081', this)">
+          🥬 Romaine (Lembang)
+        </button>
+        <button class="market-filter-pill" onclick="loadBatch('BATCH-TOM-2026-042', this)">
+          🍅 Tomatoes (Cianjur)
+        </button>
+        <button class="market-filter-pill" onclick="loadBatch('BATCH-POT-2026-031', this)">
+          🥔 Potatoes (Pangalengan)
+        </button>
+        <button class="market-filter-pill" onclick="toggleCameraScanner(this)">
+          📷 Open Camera Scanner
+        </button>
+      </div>
+    </div>
+
+    <!-- Camera Scanner Drawer (Hidden initially) -->
+    <div id="camera-scanner-card" class="fl-card" style="display: none; max-width: 500px; margin: 0 auto 2rem auto; padding: 1.25rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h4 style="font-size: 1rem; font-weight: 700;">Point Camera at Produce Crate QR</h4>
+        <button class="fl-btn-icon" onclick="stopCameraScanner()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div id="qr-reader" style="width: 100%;"></div>
+      <div id="qr-scan-result" style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--fl-text-secondary); text-align: center;">
+        Scanning for Farmlink batch code...
+      </div>
+    </div>
+
+    <!-- Certificate Card Display -->
+    <div class="cert-card" style="max-width: 900px; margin: 0 auto;">
+      
+      <div class="cert-banner">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #BBF7D0;">
+              FARMLINK OFFICIAL ORIGIN CERTIFICATE
+            </div>
+            <h2 id="batch-title" style="font-size: 1.8rem; font-weight: 800; margin-top: 0.2rem;">
+              Organic Romaine Lettuce
+            </h2>
+            <div style="font-size: 0.95rem; color: #E2F4E9; margin-top: 0.25rem;">
+              Batch ID: <strong id="batch-id-text">BATCH-ROM-2026-081</strong>
+            </div>
+          </div>
+
+          <div class="cert-seal">
+            <i class="bi bi-patch-check-fill"></i>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 2rem;">
+        
+        <!-- 3 Highlights (Origin, Harvest Time, Method) -->
+        <div class="fl-grid-3" style="margin-bottom: 2rem;">
+          <div style="background: var(--fl-bg); border-radius: var(--fl-radius-md); padding: 1.25rem; border: 1px solid var(--fl-border);">
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary); font-weight: 600;">FARM ORIGIN</div>
+            <div id="batch-farm-name" style="font-size: 1.1rem; font-weight: 700; color: var(--fl-primary-dark); margin-top: 0.25rem;">
+              Kebun Pasir Wangi
+            </div>
+            <div id="batch-location" style="font-size: 0.85rem; color: var(--fl-text-muted);">
+              Lembang, Bandung Barat (1.250 mdpl)
+            </div>
+          </div>
+
+          <div style="background: var(--fl-bg); border-radius: var(--fl-radius-md); padding: 1.25rem; border: 1px solid var(--fl-border);">
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary); font-weight: 600;">HARVEST TIMESTAMP</div>
+            <div id="batch-harvest-time" style="font-size: 1.1rem; font-weight: 700; color: var(--fl-text); margin-top: 0.25rem;">
+              Nov 6, 2026 • 06:15 WIB
+            </div>
+            <div style="font-size: 0.85rem; color: var(--fl-text-muted);">
+              Picked at dawn temperature (17°C)
+            </div>
+          </div>
+
+          <div style="background: var(--fl-bg); border-radius: var(--fl-radius-md); padding: 1.25rem; border: 1px solid var(--fl-border);">
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary); font-weight: 600;">PESTICIDE RESIDUE TEST</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #16834A; margin-top: 0.25rem;">
+              0.0 ppm (Passed)
+            </div>
+            <div style="font-size: 0.85rem; color: var(--fl-text-muted);">
+              Lab Cert: #LAB-SUCOFINDO-992
+            </div>
+          </div>
+        </div>
+
+        <!-- Two Column Detailed Breakdown -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" class="lg:grid-cols-2">
+          
+          <!-- Left: Soil & Farming Practices -->
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; color: var(--fl-text);">
+              Cultivation & Quality Audit
+            </h3>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+              <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--fl-border);">
+                <span style="color: var(--fl-text-secondary);">Grower / Lead Farmer:</span>
+                <strong id="batch-farmer-name">Pak Asep Kurniawan</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--fl-border);">
+                <span style="color: var(--fl-text-secondary);">Water Source:</span>
+                <strong>Mata Air Lereng Gn. Tangkuban Perahu</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--fl-border);">
+                <span style="color: var(--fl-text-secondary);">Fertilizer Protocol:</span>
+                <strong>Fermentasi Kompos Hayati & Bio-Urine</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--fl-border);">
+                <span style="color: var(--fl-text-secondary);">Pest Control:</span>
+                <strong>Refugia Yellow Trap & Beauveria Bassiana</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--fl-border);">
+                <span style="color: var(--fl-text-secondary);">Cold Transport Temp:</span>
+                <strong style="color: #0284C7;">Maintained at 6.8°C (Constant)</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Farmer Snapshot & Crop Image -->
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; color: var(--fl-text);">
+              Harvest Photography
+            </h3>
+            <img id="batch-img" src="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=800&q=80" alt="Harvest" style="width: 100%; height: 210px; object-fit: cover; border-radius: var(--fl-radius-lg); margin-bottom: 1rem;" />
+
+            <div style="display: flex; gap: 0.75rem;">
+              <a id="batch-order-crop-btn" href="marketplace.html" class="fl-btn fl-btn-primary fl-btn-sm" style="flex: 1;">
+                Order This Variety Wholesale
+              </a>
+              <button class="fl-btn fl-btn-outline fl-btn-sm" onclick="window.print()">
+                <i class="bi bi-printer"></i> Print Audit Slip
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let html5QrCode = null;
+
+    const BATCH_DATA = {
+      'BATCH-ROM-2026-081': {
+        title: 'Organic Romaine Lettuce',
+        farmerName: 'Pak Asep Kurniawan',
+        farmName: 'Kebun Pasir Wangi Organic',
+        location: 'Lembang, West Java (1.250 mdpl)',
+        harvestTime: 'Nov 6, 2026 • 06:15 WIB',
+        image: 'https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=800&q=80',
+        pesticide: '0.0 ppm (Passed)'
+      },
+      'BATCH-TOM-2026-042': {
+        title: 'Fresh Red Tomatoes (Beefsteak)',
+        farmerName: 'Pak Dadang Hidayat',
+        farmName: 'Cianjur Sejahtera Organics',
+        location: 'Pacet, Cianjur (950 mdpl)',
+        harvestTime: 'Nov 5, 2026 • 07:00 WIB',
+        image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80',
+        pesticide: '0.0 ppm (Passed)'
+      },
+      'BATCH-POT-2026-031': {
+        title: 'Kentang Granola Super Pangalengan',
+        farmerName: 'Ibu Siti Rahmawati',
+        farmName: 'Barokah Tani Makmur Highland',
+        location: 'Pangalengan, West Java (1.450 mdpl)',
+        harvestTime: 'Nov 4, 2026 • 08:30 WIB',
+        image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=800&q=80',
+        pesticide: '0.0 ppm (Passed)'
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const batchParam = urlParams.get('batch') || 'BATCH-ROM-2026-081';
+      loadBatch(batchParam);
+    });
+
+    function loadBatch(batchId, btnEl) {
+      if (btnEl) {
+        document.querySelectorAll('.market-filter-pill').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+
+      const data = BATCH_DATA[batchId] || BATCH_DATA['BATCH-ROM-2026-081'];
+      document.getElementById('batch-title').textContent = data.title;
+      document.getElementById('batch-id-text').textContent = batchId;
+      document.getElementById('batch-farm-name').textContent = data.farmName;
+      document.getElementById('batch-location').textContent = data.location;
+      document.getElementById('batch-harvest-time').textContent = data.harvestTime;
+      document.getElementById('batch-farmer-name').textContent = data.farmerName;
+      document.getElementById('batch-img').src = data.image;
+
+      FarmlinkToast.show(`Loaded Traceability Certificate: ${batchId}`, "success");
+    }
+
+    function toggleCameraScanner(btnEl) {
+      const card = document.getElementById('camera-scanner-card');
+      card.style.display = 'block';
+      if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("qr-reader");
+      }
+
+      Html5Qrcode.getCameras().then(cameras => {
+        if (cameras && cameras.length) {
+          const cameraId = cameras[0].id;
+          html5QrCode.start(
+            cameraId, 
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            (decodedText) => {
+              FarmlinkToast.show(`QR Code Scanned: ${decodedText}`);
+              stopCameraScanner();
+              loadBatch('BATCH-ROM-2026-081');
+            },
+            (error) => {}
+          ).catch(err => {
+            console.log("Camera start error, using simulation fallback", err);
+            simulateCameraScan();
+          });
+        } else {
+          simulateCameraScan();
+        }
+      }).catch(err => {
+        simulateCameraScan();
+      });
+    }
+
+    function simulateCameraScan() {
+      const resultEl = document.getElementById('qr-scan-result');
+      resultEl.innerHTML = `<span style="color:var(--fl-primary); font-weight:700;">Simulated scan: Detected Crate #BATCH-TOM-2026-042!</span>`;
+      setTimeout(() => {
+        stopCameraScanner();
+        loadBatch('BATCH-TOM-2026-042');
+      }, 1400);
+    }
+
+    function stopCameraScanner() {
+      const card = document.getElementById('camera-scanner-card');
+      card.style.display = 'none';
+      if (html5QrCode) {
+        try { html5QrCode.stop(); } catch(e){}
+      }
+    }
+  </script>
+</body>
+</html>
+

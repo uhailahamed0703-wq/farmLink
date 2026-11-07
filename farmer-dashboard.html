@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Farmer Dashboard – FARMLINK</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#16834A" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <style>
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+    }
+    @media (min-width: 1024px) {
+      .dashboard-layout {
+        grid-template-columns: 260px 1fr;
+      }
+    }
+    .dash-sidebar {
+      background: #FFFFFF;
+      border-right: 1px solid var(--fl-border);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--fl-radius-md);
+      font-size: 0.925rem;
+      font-weight: 600;
+      color: var(--fl-text-secondary);
+      cursor: pointer;
+      transition: all var(--fl-transition-fast);
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .dash-nav-item:hover, .dash-nav-item.active {
+      background: var(--fl-primary-light);
+      color: var(--fl-primary-dark);
+    }
+    .dash-nav-item i {
+      font-size: 1.15rem;
+    }
+    .dash-content {
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+    @media (min-width: 768px) {
+      .dash-content {
+        padding: 2.25rem;
+      }
+    }
+    .tab-view {
+      display: none;
+    }
+    .tab-view.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="dash-sidebar">
+      <div style="padding: 0.5rem 0.5rem 1.5rem 0.5rem; display: flex; align-items: center; gap: 0.6rem;">
+        <div class="fl-logo-icon" style="width:34px; height:34px;">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <div style="font-weight: 800; font-size: 1.2rem; color: var(--fl-primary-dark);">FARMLINK</div>
+      </div>
+
+      <!-- Farmer Profile Mini Badge -->
+      <div style="background: var(--fl-bg); border-radius: var(--fl-radius-lg); padding: 0.85rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; border: 1px solid var(--fl-border);">
+        <img src="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=120&q=80" alt="Pak Asep" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;" />
+        <div style="overflow: hidden;">
+          <div style="font-weight: 700; font-size: 0.875rem; color: var(--fl-text); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Pak Asep Kurniawan</div>
+          <div style="font-size: 0.75rem; color: var(--fl-primary); font-weight: 600;">Kebun Pasir Wangi</div>
+        </div>
+      </div>
+
+      <button class="dash-nav-item active" onclick="switchFarmerTab('overview', this)">
+        <i class="bi bi-grid"></i> Overview
+      </button>
+      <button class="dash-nav-item" onclick="switchFarmerTab('products', this)">
+        <i class="bi bi-boxes"></i> My Products
+      </button>
+      <button class="dash-nav-item" onclick="openAddHarvestModal()">
+        <i class="bi bi-plus-circle-fill" style="color: var(--fl-primary);"></i> Add Harvest
+      </button>
+      <button class="dash-nav-item" onclick="switchFarmerTab('orders', this)">
+        <i class="bi bi-bag-check"></i> Orders
+        <span class="fl-badge fl-badge-verified" style="margin-left: auto; font-size: 0.7rem;">3 Live</span>
+      </button>
+      <button class="dash-nav-item" onclick="switchFarmerTab('customers', this)">
+        <i class="bi bi-people"></i> Customers
+      </button>
+      <button class="dash-nav-item" onclick="switchFarmerTab('earnings', this)">
+        <i class="bi bi-wallet2"></i> Earnings
+      </button>
+      <button class="dash-nav-item" onclick="switchFarmerTab('profile', this)">
+        <i class="bi bi-person-badge"></i> Farm Profile
+      </button>
+
+      <div style="margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--fl-border);">
+        <a href="index.html" class="dash-nav-item">
+          <i class="bi bi-house"></i> Public Homepage
+        </a>
+        <button class="dash-nav-item" onclick="window.store.logout()" style="color: #DC2626;">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dash-content">
+      
+      <!-- Top Title Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 id="tab-heading" style="font-size: 1.8rem; font-weight: 800; color: var(--fl-primary-dark);">
+            Farmer Dashboard Overview
+          </h1>
+          <p style="font-size: 0.9rem; color: var(--fl-text-secondary);">
+            Welcome back, Pak Asep. You have 2 new orders scheduled for morning harvest.
+          </p>
+        </div>
+
+        <button class="fl-btn fl-btn-primary" onclick="openAddHarvestModal()">
+          <i class="bi bi-plus-lg"></i> List New Harvest
+        </button>
+      </div>
+
+      <!-- ================= TAB 1: OVERVIEW ================= -->
+      <section id="tab-overview" class="tab-view active">
+        <!-- Metric Cards -->
+        <div class="fl-grid-4" style="margin-bottom: 2rem;">
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-green"><i class="bi bi-boxes"></i></div>
+            <div>
+              <div class="fl-stat-number" id="farmer-active-listings">4 Varieties</div>
+              <div class="fl-stat-label">Active Listed Crops</div>
+            </div>
+          </div>
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-amber"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+              <div class="fl-stat-number" id="farmer-pending-orders">2 Orders</div>
+              <div class="fl-stat-label">Pending Harvest Today</div>
+            </div>
+          </div>
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-blue"><i class="bi bi-check2-circle"></i></div>
+            <div>
+              <div class="fl-stat-number">580+</div>
+              <div class="fl-stat-label">Completed Orders</div>
+            </div>
+          </div>
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-green"><i class="bi bi-cash-stack"></i></div>
+            <div>
+              <div class="fl-stat-number">Rp 48.250.000</div>
+              <div class="fl-stat-label">Monthly Gross Revenue</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two Column: Incoming Orders & Crop Performance -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" class="lg:grid-cols-2">
+          
+          <!-- Recent Orders to Fulfill -->
+          <div class="fl-card" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <h3 style="font-size: 1.15rem; font-weight: 700;">Incoming Commercial Orders</h3>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm" onclick="switchFarmerTab('orders')">View All</button>
+            </div>
+            <div id="overview-orders-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Top Performing Produce -->
+          <div class="fl-card" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <h3 style="font-size: 1.15rem; font-weight: 700;">Harvest Inventory Status</h3>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm" onclick="switchFarmerTab('products')">Manage Stock</button>
+            </div>
+            <div id="overview-products-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: MY PRODUCTS ================= -->
+      <section id="tab-products" class="tab-view">
+        <div class="fl-card" style="padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 700;">Harvest Crop Catalog</h3>
+            <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="openAddHarvestModal()">
+              <i class="bi bi-plus-lg"></i> Add New Harvest Listing
+            </button>
+          </div>
+
+          <div id="farmer-products-table-wrap">
+            <!-- Table rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: ORDERS ================= -->
+      <section id="tab-orders" class="tab-view">
+        <div class="fl-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">Manage Procurement Orders</h3>
+          <p style="font-size: 0.85rem; color: var(--fl-text-secondary); margin-bottom: 1.5rem;">
+            Update statuses as you harvest and prepare cold packages. Farmlink cold couriers arrive based on your status updates.
+          </p>
+
+          <div id="farmer-orders-full-list">
+            <!-- Orders list -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: CUSTOMERS ================= -->
+      <section id="tab-customers" class="tab-view">
+        <div class="fl-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">Repeat Commercial Buyers</h3>
+          <div class="fl-grid-3">
+            <div class="fl-card" style="padding: 1.25rem; border: 1px solid var(--fl-border-light);">
+              <div style="font-weight: 700; font-size: 1.05rem;">Resto Nusantara Gourmet</div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary); margin-bottom: 0.5rem;">Chef Dewa Santika • Bandung</div>
+              <span class="fl-badge fl-badge-verified">Weekly Subscriber</span>
+              <div style="font-size: 0.85rem; margin-top: 0.75rem; color: var(--fl-primary-dark); font-weight: 600;">
+                Orders: 84 times (Rp 142.000.000 total)
+              </div>
+            </div>
+
+            <div class="fl-card" style="padding: 1.25rem; border: 1px solid var(--fl-border-light);">
+              <div style="font-weight: 700; font-size: 1.05rem;">Grand Savoy Hotel Lembang</div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary); margin-bottom: 0.5rem;">Pak Farhan • 5-Star Hotel</div>
+              <span class="fl-badge fl-badge-verified">Contract Buyer</span>
+              <div style="font-size: 0.85rem; margin-top: 0.75rem; color: var(--fl-primary-dark); font-weight: 600;">
+                Orders: 165 times (Rp 310.000.000 total)
+              </div>
+            </div>
+
+            <div class="fl-card" style="padding: 1.25rem; border: 1px solid var(--fl-border-light);">
+              <div style="font-weight: 700; font-size: 1.05rem;">Segar Mart Supermarket</div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary); margin-bottom: 0.5rem;">Ibu Ratna • Retail Chain</div>
+              <span class="fl-badge fl-badge-organic">Direct Supplier</span>
+              <div style="font-size: 0.85rem; margin-top: 0.75rem; color: var(--fl-primary-dark); font-weight: 600;">
+                Orders: 42 times (Rp 89.000.000 total)
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 5: EARNINGS ================= -->
+      <section id="tab-earnings" class="tab-view">
+        <div class="fl-grid-3" style="margin-bottom: 1.5rem;">
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-green"><i class="bi bi-wallet-fill"></i></div>
+            <div>
+              <div class="fl-stat-number">Rp 12.450.000</div>
+              <div class="fl-stat-label">Available for Payout</div>
+            </div>
+          </div>
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-blue"><i class="bi bi-clock-history"></i></div>
+            <div>
+              <div class="fl-stat-number">Rp 3.520.000</div>
+              <div class="fl-stat-label">Pending Courier Delivery</div>
+            </div>
+          </div>
+          <div class="fl-stat-card">
+            <div class="fl-stat-icon fl-stat-amber"><i class="bi bi-bank"></i></div>
+            <div>
+              <div class="fl-stat-number">Bank BCA</div>
+              <div class="fl-stat-label">Rek: 8210-9912-34 (Asep K.)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fl-card" style="padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700;">Payout History</h3>
+            <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="FarmlinkToast.show('Withdrawal request of Rp 12.450.000 submitted to BCA!', 'success')">
+              Request Bank Transfer
+            </button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--fl-border); text-align: left; color: var(--fl-text-secondary);">
+                  <th style="padding: 0.75rem 0.5rem;">Date</th>
+                  <th style="padding: 0.75rem 0.5rem;">Reference</th>
+                  <th style="padding: 0.75rem 0.5rem;">Amount</th>
+                  <th style="padding: 0.75rem 0.5rem;">Bank Target</th>
+                  <th style="padding: 0.75rem 0.5rem;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--fl-border-light);">
+                  <td style="padding: 0.85rem 0.5rem;">Nov 5, 2026</td>
+                  <td style="padding: 0.85rem 0.5rem; font-weight: 600;">WD-2026-992</td>
+                  <td style="padding: 0.85rem 0.5rem; font-weight: 700; color: var(--fl-primary-dark);">Rp 18.200.000</td>
+                  <td style="padding: 0.85rem 0.5rem;">BCA • 8210-9912-34</td>
+                  <td style="padding: 0.85rem 0.5rem;"><span class="fl-badge fl-badge-verified">Completed</span></td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--fl-border-light);">
+                  <td style="padding: 0.85rem 0.5rem;">Oct 28, 2026</td>
+                  <td style="padding: 0.85rem 0.5rem; font-weight: 600;">WD-2026-950</td>
+                  <td style="padding: 0.85rem 0.5rem; font-weight: 700; color: var(--fl-primary-dark);">Rp 15.600.000</td>
+                  <td style="padding: 0.85rem 0.5rem;">BCA • 8210-9912-34</td>
+                  <td style="padding: 0.85rem 0.5rem;"><span class="fl-badge fl-badge-verified">Completed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 6: FARM PROFILE EDIT ================= -->
+      <section id="tab-profile" class="tab-view">
+        <div class="fl-card" style="padding: 1.5rem; max-width: 720px;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">Farm Profile & Verifications</h3>
+          <form onsubmit="saveFarmProfile(event)">
+            <div class="fl-grid-2">
+              <div class="fl-form-group">
+                <label class="fl-label">Farm Commercial Name</label>
+                <input type="text" id="prof-farm-name" class="fl-input" value="Kebun Pasir Wangi Organic" />
+              </div>
+              <div class="fl-form-group">
+                <label class="fl-label">Lead Farmer Name</label>
+                <input type="text" id="prof-farmer-name" class="fl-input" value="Pak Asep Kurniawan" />
+              </div>
+            </div>
+
+            <div class="fl-grid-2">
+              <div class="fl-form-group">
+                <label class="fl-label">Farm Location (Regency)</label>
+                <input type="text" id="prof-location" class="fl-input" value="Lembang, West Java" />
+              </div>
+              <div class="fl-form-group">
+                <label class="fl-label">Cultivated Land Size</label>
+                <input type="text" id="prof-size" class="fl-input" value="4.5 Hectares" />
+              </div>
+            </div>
+
+            <div class="fl-form-group">
+              <label class="fl-label">Farming Method</label>
+              <select id="prof-method" class="fl-select">
+                <option value="Organic">Organic Certified (SNI 6729:2016)</option>
+                <option value="Pesticide-Free">Pesticide-Free (Prima 2)</option>
+                <option value="Standard Farming">Standard GAP Hortikultura</option>
+              </select>
+            </div>
+
+            <div class="fl-form-group">
+              <label class="fl-label">Farm Story & Agricultural Practices</label>
+              <textarea id="prof-story" class="fl-textarea" rows="4">Generasi ketiga petani hortikultura di lereng Tangkuban Perahu. Kami menerapkan pertanian regeneratif, pupuk kompos kandang fermentasi, serta air pegunungan alami tanpa pestisida kimia sintetis.</textarea>
+            </div>
+
+            <button type="submit" class="fl-btn fl-btn-primary">
+              <i class="bi bi-save"></i> Save Profile Changes
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Add Harvest Modal -->
+  <div id="add-harvest-modal" class="fl-modal-overlay">
+    <div class="fl-modal-content">
+      <div class="fl-modal-handle"></div>
+      <div style="padding: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--fl-primary-dark);">List New Harvest</h3>
+          <button class="fl-btn-icon" onclick="closeAddHarvestModal()"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        <form onsubmit="submitNewHarvest(event)">
+          <div class="fl-form-group">
+            <label class="fl-label">Produce Name</label>
+            <input type="text" id="add-name" class="fl-input" placeholder="e.g. Organic Beefsteak Tomatoes" required />
+          </div>
+
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Category</label>
+              <select id="add-category" class="fl-select">
+                <option value="Leafy Greens">Leafy Greens</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Root Vegetables">Root Vegetables</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Herbs">Herbs</option>
+                <option value="Organic Produce">Organic Specialties</option>
+              </select>
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Farming Method</label>
+              <select id="add-method" class="fl-select">
+                <option value="Organic">Organic Certified</option>
+                <option value="Pesticide-Free">Pesticide-Free</option>
+                <option value="Standard Farming">Standard GAP</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Available Harvest (kg)</label>
+              <input type="number" id="add-qty" class="fl-input" placeholder="e.g. 500" required />
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Wholesale Price / kg (Rp)</label>
+              <input type="number" id="add-price" class="fl-input" placeholder="e.g. 18000" required />
+            </div>
+          </div>
+
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Harvest Date</label>
+              <input type="date" id="add-date" class="fl-input" required />
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Minimum Order (kg)</label>
+              <input type="number" id="add-min-order" class="fl-input" value="10" />
+            </div>
+          </div>
+
+          <div class="fl-form-group">
+            <label class="fl-label">Sample Real Agricultural Photograph</label>
+            <select id="add-image-preset" class="fl-select" onchange="previewPresetImage(this.value)">
+              <option value="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=800&q=80">Fresh Romaine Lettuce</option>
+              <option value="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80">Red Tomatoes (Vine)</option>
+              <option value="https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=800&q=80">Red Chillies (Keriting)</option>
+              <option value="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=800&q=80">Granola Potatoes</option>
+              <option value="https://images.unsplash.com/photo-1598170845058-32b9d6a5c317?auto=format&fit=crop&w=800&q=80">Fresh Sweet Carrots</option>
+              <option value="https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&w=800&q=80">Kyuri Japanese Cucumbers</option>
+            </select>
+            <div style="margin-top: 0.75rem;">
+              <img id="add-image-preview" src="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=800&q=80" alt="Preview" style="width: 100%; height: 140px; object-fit: cover; border-radius: var(--fl-radius-md);" />
+            </div>
+          </div>
+
+          <div class="fl-form-group">
+            <label class="fl-label">Produce Description & Quality Notes</label>
+            <textarea id="add-desc" class="fl-textarea" rows="2" placeholder="Freshly harvested with mountain water, crisp texture, ideal for Caesar salads and hotels..."></textarea>
+          </div>
+
+          <button type="submit" class="fl-btn fl-btn-primary" style="width: 100%;">
+            Publish Harvest to Marketplace
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Stock Modal -->
+  <div id="edit-stock-modal" class="fl-modal-overlay">
+    <div class="fl-modal-content" style="max-width: 440px;">
+      <div class="fl-modal-handle"></div>
+      <div style="padding: 1.5rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Update Harvest Stock</h3>
+        <input type="hidden" id="edit-stock-id" />
+        <div class="fl-form-group">
+          <label class="fl-label" id="edit-stock-name">Produce Name</label>
+          <input type="number" id="edit-stock-qty" class="fl-input" />
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="fl-btn fl-btn-outline" style="flex:1;" onclick="closeEditStockModal()">Cancel</button>
+          <button class="fl-btn fl-btn-primary" style="flex:1;" onclick="saveStockUpdate()">Save Stock</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const CURRENT_FARMER_ID = "F01"; // Pak Asep Kurniawan
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set harvest date default to today
+      document.getElementById('add-date').value = new Date().toISOString().split('T')[0];
+
+      loadFarmerDashboardData();
+    });
+
+    function switchFarmerTab(tabName, btnEl) {
+      document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.dash-nav-item').forEach(b => b.classList.remove('active'));
+
+      const target = document.getElementById(`tab-${tabName}`);
+      if (target) target.classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+
+      const headings = {
+        'overview': 'Farmer Dashboard Overview',
+        'products': 'My Harvest Products Catalog',
+        'orders': 'Incoming Commercial Orders',
+        'customers': 'Commercial Buyer Relationships',
+        'earnings': 'Farm Revenue & Payouts',
+        'profile': 'Farm Profile & Certifications'
+      };
+      document.getElementById('tab-heading').textContent = headings[tabName] || 'Farmer Dashboard';
+
+      loadFarmerDashboardData();
+    }
+
+    function loadFarmerDashboardData() {
+      const myProducts = window.store.getProductsByFarmer(CURRENT_FARMER_ID);
+      const allOrders = window.store.getOrders();
+      const myOrders = allOrders.filter(o => o.farmerId === CURRENT_FARMER_ID);
+
+      document.getElementById('farmer-active-listings').textContent = `${myProducts.length} Crops`;
+      document.getElementById('farmer-pending-orders').textContent = `${myOrders.filter(o => o.status !== 'Delivered').length} Orders`;
+
+      // Render Overview Orders
+      const overviewOrdersEl = document.getElementById('overview-orders-list');
+      if (myOrders.length === 0) {
+        overviewOrdersEl.innerHTML = `<p style="color:var(--fl-text-muted);">No orders yet.</p>`;
+      } else {
+        overviewOrdersEl.innerHTML = myOrders.slice(0, 3).map(o => `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 0; border-bottom: 1px solid var(--fl-border-light);">
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem;">${o.id} • ${o.businessName}</div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">${o.items.length} items • ${formatRupiah(o.totalAmount)}</div>
+            </div>
+            <div style="text-align: right;">
+              <span class="fl-badge fl-badge-verified">${o.status}</span>
+              <div style="margin-top: 4px;">
+                <a href="order-tracking.html?id=${o.id}" style="font-size: 0.775rem; color: var(--fl-primary); font-weight: 600;">Track →</a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render Overview Products
+      const overviewProdsEl = document.getElementById('overview-products-list');
+      overviewProdsEl.innerHTML = myProducts.map(p => `
+        <div style="display: flex; gap: 0.75rem; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid var(--fl-border-light);">
+          <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover;" />
+          <div style="flex: 1;">
+            <div style="font-weight: 700; font-size: 0.9rem;">${p.name}</div>
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">${formatRupiah(p.price)}/kg • Stock: ${p.availableStock} kg</div>
+          </div>
+          <button class="fl-btn fl-btn-outline fl-btn-sm" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;" onclick="openEditStock('${p.id}', '${p.name}', ${p.availableStock})">
+            Edit
+          </button>
+        </div>
+      `).join('');
+
+      // Render Full Products Table
+      const tableWrap = document.getElementById('farmer-products-table-wrap');
+      tableWrap.innerHTML = `
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--fl-border); text-align: left; color: var(--fl-text-secondary);">
+                <th style="padding: 0.75rem;">Produce</th>
+                <th style="padding: 0.75rem;">Category</th>
+                <th style="padding: 0.75rem;">Price / kg</th>
+                <th style="padding: 0.75rem;">Stock (kg)</th>
+                <th style="padding: 0.75rem;">Harvest Date</th>
+                <th style="padding: 0.75rem;">Method</th>
+                <th style="padding: 0.75rem; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${myProducts.map(p => `
+                <tr style="border-bottom: 1px solid var(--fl-border-light);">
+                  <td style="padding: 0.75rem; display: flex; align-items: center; gap: 0.6rem;">
+                    <img src="${p.image}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;" />
+                    <strong style="color: var(--fl-text);">${p.name}</strong>
+                  </td>
+                  <td style="padding: 0.75rem;">${p.category}</td>
+                  <td style="padding: 0.75rem; font-weight: 700; color: var(--fl-primary-dark);">${formatRupiah(p.price)}</td>
+                  <td style="padding: 0.75rem;">${p.availableStock} kg</td>
+                  <td style="padding: 0.75rem;">${p.harvestDate}</td>
+                  <td style="padding: 0.75rem;"><span class="fl-badge fl-badge-organic">${p.farmingMethod}</span></td>
+                  <td style="padding: 0.75rem; text-align: right;">
+                    <button class="fl-btn fl-btn-outline fl-btn-sm" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="openEditStock('${p.id}', '${p.name}', ${p.availableStock})">
+                      Stock
+                    </button>
+                    <button class="fl-btn fl-btn-ghost fl-btn-sm" style="color:#DC2626; padding:0.25rem 0.5rem;" onclick="deleteCrop('${p.id}')">
+                      <i class="bi bi-trash3"></i>
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      // Render Full Orders List
+      const fullOrdersEl = document.getElementById('farmer-orders-full-list');
+      fullOrdersEl.innerHTML = myOrders.map(o => `
+        <div style="background: var(--fl-bg); border-radius: var(--fl-radius-lg); padding: 1.25rem; margin-bottom: 1rem; border: 1px solid var(--fl-border);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <div>
+              <div style="font-weight: 800; font-size: 1.05rem; color: var(--fl-text);">
+                Order #${o.id} • ${o.businessName}
+              </div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">
+                Delivery Destination: ${o.deliveryAddress}
+              </div>
+            </div>
+            <div>
+              <span class="fl-badge fl-badge-verified">${o.status}</span>
+            </div>
+          </div>
+
+          <div style="background: #FFFFFF; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem;">
+            ${(o.items || []).map(i => `
+              <div style="font-size: 0.85rem; display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                <span>${i.quantity} kg x ${i.productName}</span>
+                <strong>${formatRupiah(i.total || (i.price * i.quantity))}</strong>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+            <div style="font-size: 0.95rem; font-weight: 800; color: var(--fl-primary-dark);">
+              Total: ${formatRupiah(o.totalAmount)}
+            </div>
+
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="fl-btn fl-btn-outline fl-btn-sm" onclick="advanceOrderStatus('${o.id}', 'Preparing Harvest')">
+                Harvesting Started
+              </button>
+              <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="advanceOrderStatus('${o.id}', 'Harvest Completed')">
+                Harvest Completed & Cold Packed
+              </button>
+              <a href="order-tracking.html?id=${o.id}" class="fl-btn fl-btn-secondary fl-btn-sm">
+                View Tracker
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openAddHarvestModal() {
+      document.getElementById('add-harvest-modal').classList.add('active');
+    }
+
+    function closeAddHarvestModal() {
+      document.getElementById('add-harvest-modal').classList.remove('active');
+    }
+
+    function previewPresetImage(url) {
+      document.getElementById('add-image-preview').src = url;
+    }
+
+    function submitNewHarvest(e) {
+      e.preventDefault();
+      const farmer = window.store.getFarmerById(CURRENT_FARMER_ID);
+
+      const newProduct = {
+        name: document.getElementById('add-name').value,
+        category: document.getElementById('add-category').value,
+        farmerId: CURRENT_FARMER_ID,
+        farmerName: farmer.name,
+        farmName: farmer.farmName,
+        location: farmer.location,
+        price: parseInt(document.getElementById('add-price').value),
+        unit: 'kg',
+        availableStock: parseInt(document.getElementById('add-qty').value),
+        minOrder: parseInt(document.getElementById('add-min-order').value) || 10,
+        harvestDate: document.getElementById('add-date').value,
+        farmingMethod: document.getElementById('add-method').value,
+        verificationBadge: document.getElementById('add-method').value === 'Organic' ? 'Certified Organic' : 'Verified Farm',
+        image: document.getElementById('add-image-preset').value,
+        description: document.getElementById('add-desc').value || "Harvested directly with cold-chain care.",
+        rating: 4.9,
+        reviewsCount: 1,
+        bulkTiers: [
+          { minQty: 50, discountPercent: 6, price: Math.round(parseInt(document.getElementById('add-price').value) * 0.94) }
+        ]
+      };
+
+      window.store.saveProduct(newProduct);
+      closeAddHarvestModal();
+      FarmlinkToast.show(`Published ${newProduct.name} to wholesale marketplace!`, 'success');
+      loadFarmerDashboardData();
+    }
+
+    function openEditStock(id, name, qty) {
+      document.getElementById('edit-stock-id').value = id;
+      document.getElementById('edit-stock-name').textContent = `Available Stock: ${name} (kg)`;
+      document.getElementById('edit-stock-qty').value = qty;
+      document.getElementById('edit-stock-modal').classList.add('active');
+    }
+
+    function closeEditStockModal() {
+      document.getElementById('edit-stock-modal').classList.remove('active');
+    }
+
+    function saveStockUpdate() {
+      const id = document.getElementById('edit-stock-id').value;
+      const qty = parseInt(document.getElementById('edit-stock-qty').value);
+      const prod = window.store.getProductById(id);
+      if (prod) {
+        prod.availableStock = qty;
+        window.store.saveProduct(prod);
+        closeEditStockModal();
+        FarmlinkToast.show(`Stock updated to ${qty} kg`, 'success');
+        loadFarmerDashboardData();
+      }
+    }
+
+    function deleteCrop(id) {
+      if (confirm("Are you sure you want to remove this crop listing from the marketplace?")) {
+        window.store.deleteProduct(id);
+        FarmlinkToast.show("Product listing removed", "info");
+        loadFarmerDashboardData();
+      }
+    }
+
+    function advanceOrderStatus(orderId, newStatus) {
+      window.store.updateOrderStatus(orderId, newStatus);
+      FarmlinkToast.show(`Order #${orderId} marked as: ${newStatus}`, 'success');
+      loadFarmerDashboardData();
+    }
+
+    function saveFarmProfile(e) {
+      e.preventDefault();
+      FarmlinkToast.show("Farm profile updated successfully!", "success");
+    }
+  </script>
+</body>
+</html>
+

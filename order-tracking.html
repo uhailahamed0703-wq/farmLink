@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Delivery Tracking & Cold Chain Logistics – FARMLINK</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#16834A" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <style>
+    .status-badge-live {
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(22, 131, 74, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(22, 131, 74, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(22, 131, 74, 0); }
+    }
+    .cold-box-card {
+      background: linear-gradient(135deg, #0C4A6E, #0369A1);
+      color: #FFFFFF;
+      border-radius: var(--fl-radius-xl);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="fl-navbar">
+    <div class="fl-nav-container">
+      <a href="index.html" class="fl-logo">
+        <div class="fl-logo-icon">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <span>FARMLINK</span>
+      </a>
+
+      <ul class="fl-nav-links">
+        <li><a href="index.html" class="fl-nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="fl-nav-link">Marketplace</a></li>
+        <li><a href="buyer-dashboard.html" class="fl-nav-link">Buyer Dashboard</a></li>
+        <li><a href="farmer-dashboard.html" class="fl-nav-link">Farmer Portal</a></li>
+        <li><a href="traceability.html" class="fl-nav-link">QR Traceability</a></li>
+      </ul>
+
+      <div class="fl-nav-actions">
+        <a href="buyer-dashboard.html" class="fl-btn fl-btn-secondary fl-btn-sm">
+          <i class="bi bi-arrow-left"></i> My Orders
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="fl-container">
+    
+    <!-- Order Header & Live Status Bar -->
+    <div style="background: #FFFFFF; border-radius: var(--fl-radius-xl); border: 1px solid var(--fl-border); padding: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+          <span style="font-size: 0.85rem; font-weight: 700; color: var(--fl-text-secondary);">ORDER ID:</span>
+          <h1 id="track-order-id" style="font-size: 1.6rem; font-weight: 800; color: var(--fl-text); line-height: 1;">
+            ORD-2026-881
+          </h1>
+          <span id="track-status-pill" class="fl-badge fl-badge-verified status-badge-live">
+            In Transit
+          </span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--fl-text-secondary);">
+          Estimated Delivery: <strong id="track-eta" style="color:var(--fl-primary-dark);">Today at 10:45 AM</strong> (Temperature Controlled)
+        </p>
+      </div>
+
+      <!-- Simulator Controls for Demonstration -->
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; background: var(--fl-bg); padding: 0.5rem 0.85rem; border-radius: var(--fl-radius-pill); border: 1px solid var(--fl-border);">
+        <span style="font-size: 0.75rem; font-weight: 700; color: var(--fl-text-secondary); text-transform: uppercase;">
+          🛠️ Demo Status Simulator:
+        </span>
+        <button class="fl-btn fl-btn-outline fl-btn-sm" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;" onclick="simulatePrevStatus()">
+          ◀ Step Back
+        </button>
+        <button class="fl-btn fl-btn-primary fl-btn-sm" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;" onclick="simulateNextStatus()">
+          Advance Step ▶
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Grid: Timeline & Cold-chain Details -->
+    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" class="lg:grid-cols-3">
+      
+      <!-- Left Column (Span 2): 7-Step Logistics Timeline -->
+      <div style="grid-column: span 2;">
+        <div class="fl-card" style="padding: 2rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--fl-border-light); padding-bottom: 0.75rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--fl-primary-dark);">
+              7-Step Farm-to-Kitchen Delivery Timeline
+            </h2>
+            <span style="font-size: 0.8rem; color: var(--fl-text-muted);">Real-time Telemetry</span>
+          </div>
+
+          <!-- Timeline Container -->
+          <div class="fl-timeline" id="tracking-timeline-container">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Ordered Items Summary -->
+        <div class="fl-card" style="padding: 1.5rem; margin-top: 1.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Consolidated Produce Manifest</h3>
+          <div id="track-items-list">
+            <!-- Items rendered here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Cold Chain Sensor, Courier & Traceability QR -->
+      <div>
+        
+        <!-- Cold Chain Sensor Card -->
+        <div class="cold-box-card" style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #BAE6FD;">
+              ❄️ Active Cold-Chain Sensor
+            </span>
+            <span style="background: rgba(255,255,255,0.2); padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem;">LIVE</span>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <div id="sensor-temp" style="font-size: 2.8rem; font-weight: 900; line-height: 1;">
+              6.8°C
+            </div>
+            <div style="font-size: 0.9rem; color: #E0F2FE;">Target: 4°C - 8°C (Optimal)</div>
+          </div>
+          <p style="font-size: 0.825rem; color: #BAE6FD; line-height: 1.4;">
+            Vehicle box refrigeration active. Produce cell structure and leaf turgor preserved since dawn harvest.
+          </p>
+
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: space-between; font-size: 0.8rem;">
+            <span>Vehicle: <strong>Daihatsu Reefer Box</strong></span>
+            <span>Plate: <strong>D 8421 FML</strong></span>
+          </div>
+        </div>
+
+        <!-- Courier Contact Card -->
+        <div class="fl-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--fl-text-secondary); text-transform: uppercase; margin-bottom: 0.75rem;">
+            Dedicated Driver
+          </h4>
+          <div style="display: flex; gap: 0.85rem; align-items: center;">
+            <div style="width: 48px; height: 48px; background: var(--fl-primary-light); color: var(--fl-primary-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+              <i class="bi bi-person-badge"></i>
+            </div>
+            <div>
+              <div id="driver-name" style="font-weight: 700; font-size: 0.95rem;">Agus Supriadi</div>
+              <div id="driver-phone" style="font-size: 0.8rem; color: var(--fl-text-secondary);">+62 822-1144-8899</div>
+            </div>
+          </div>
+          <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+            <button class="fl-btn fl-btn-outline fl-btn-sm" style="flex: 1;" onclick="FarmlinkToast.show('Calling driver...', 'info')">
+              <i class="bi bi-telephone"></i> Call
+            </button>
+            <button class="fl-btn fl-btn-secondary fl-btn-sm" style="flex: 1;" onclick="FarmlinkToast.show('Opening driver WhatsApp chat...', 'info')">
+              <i class="bi bi-whatsapp"></i> Chat
+            </button>
+          </div>
+        </div>
+
+        <!-- QR Traceability Verification Card -->
+        <div class="fl-card" style="padding: 1.5rem; text-align: center;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--fl-text-secondary); text-transform: uppercase; margin-bottom: 0.5rem;">
+            Produce Batch Traceability
+          </h4>
+          <p style="font-size: 0.8rem; color: var(--fl-text-secondary); margin-bottom: 1rem;">
+            Each batch is certified from farm plot to kitchen loading dock.
+          </p>
+
+          <img id="track-qr-img" src="" alt="Batch QR Code" style="width: 140px; height: 140px; margin: 0 auto 1rem auto; display: block; border-radius: 12px; border: 1px solid var(--fl-border);" />
+
+          <a id="track-trace-btn" href="traceability.html" class="fl-btn fl-btn-primary fl-btn-sm" style="width: 100%;">
+            <i class="bi bi-patch-check"></i> View Farm Certificate
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const ALL_STATUSES = [
+      "Order Placed",
+      "Farmer Accepted",
+      "Preparing Harvest",
+      "Harvest Completed",
+      "Picked Up",
+      "In Transit",
+      "Delivered"
+    ];
+
+    let currentOrder = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('id') || 'ORD-2026-881';
+      currentOrder = window.store.getOrderById(orderId) || window.store.getOrders()[0];
+
+      if (!currentOrder) {
+        alert("Order not found.");
+        window.location.href = "buyer-dashboard.html";
+        return;
+      }
+
+      renderOrderTracking(currentOrder);
+    });
+
+    function renderOrderTracking(order) {
+      document.title = `Tracking ${order.id} – FARMLINK`;
+
+      document.getElementById('track-order-id').textContent = order.id;
+      document.getElementById('track-status-pill').textContent = order.status;
+      
+      const currentIdx = ALL_STATUSES.indexOf(order.status);
+
+      // Render 7-step timeline
+      const timelineContainer = document.getElementById('tracking-timeline-container');
+      const stepDescriptions = {
+        "Order Placed": "Purchase Order received and registered in Farmlink network.",
+        "Farmer Accepted": `${order.farmerName} confirmed produce volume and harvest availability.`,
+        "Preparing Harvest": "Field workers initiate morning harvest under GAP standard.",
+        "Harvest Completed": "Produce washed, cold-pack graded, and tested 0.0 ppm pesticide.",
+        "Picked Up": "Loaded into Farmlink refrigerated reefer container.",
+        "In Transit": "En route with live cold-chain telemetry active.",
+        "Delivered": "Safely arrived and signed by head chef / inventory receiver."
+      };
+
+      timelineContainer.innerHTML = ALL_STATUSES.map((st, idx) => {
+        let stepClass = "";
+        let timeLabel = "";
+
+        if (idx < currentIdx) {
+          stepClass = "completed";
+          timeLabel = `Completed • Step ${idx + 1}`;
+        } else if (idx === currentIdx) {
+          stepClass = "active";
+          timeLabel = `In Progress Now • Step ${idx + 1}`;
+        } else {
+          stepClass = "upcoming";
+          timeLabel = `Pending • Step ${idx + 1}`;
+        }
+
+        return `
+          <div class="fl-timeline-step ${stepClass}">
+            <div class="fl-timeline-title" style="${idx === currentIdx ? 'color:var(--fl-primary); font-size:1.05rem;' : ''}">
+              ${st}
+            </div>
+            <div class="fl-timeline-time">${timeLabel}</div>
+            <div class="fl-timeline-desc">${stepDescriptions[st]}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Render items
+      const itemsList = document.getElementById('track-items-list');
+      itemsList.innerHTML = (order.items || []).map(item => `
+        <div style="display: flex; gap: 0.85rem; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid var(--fl-border-light);">
+          <img src="${item.image}" alt="${item.productName}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover;" />
+          <div style="flex: 1;">
+            <div style="font-weight: 700; font-size: 0.9rem;">${item.productName}</div>
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">${item.quantity} ${item.unit || 'kg'} • ${formatRupiah(item.price)}/kg</div>
+          </div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: var(--fl-primary-dark);">
+            ${formatRupiah(item.total || (item.price * item.quantity))}
+          </div>
+        </div>
+      `).join('');
+
+      // QR Code
+      const batchCode = order.batchId || "BATCH-2026-081";
+      document.getElementById('track-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://farmlink.id/traceability.html?batch=${batchCode}`;
+      document.getElementById('track-trace-btn').href = `traceability.html?batch=${batchCode}`;
+    }
+
+    // Interactive status simulator functions
+    function simulateNextStatus() {
+      let currentIdx = ALL_STATUSES.indexOf(currentOrder.status);
+      if (currentIdx < ALL_STATUSES.length - 1) {
+        currentIdx++;
+        const nextStatus = ALL_STATUSES[currentIdx];
+        window.store.updateOrderStatus(currentOrder.id, nextStatus);
+        currentOrder.status = nextStatus;
+        renderOrderTracking(currentOrder);
+        FarmlinkToast.show(`Simulated status advance: ${nextStatus}`, "success");
+      } else {
+        FarmlinkToast.show("Order is already at final status (Delivered)", "info");
+      }
+    }
+
+    function simulatePrevStatus() {
+      let currentIdx = ALL_STATUSES.indexOf(currentOrder.status);
+      if (currentIdx > 0) {
+        currentIdx--;
+        const prevStatus = ALL_STATUSES[currentIdx];
+        window.store.updateOrderStatus(currentOrder.id, prevStatus);
+        currentOrder.status = prevStatus;
+        renderOrderTracking(currentOrder);
+        FarmlinkToast.show(`Simulated status rewind: ${prevStatus}`, "info");
+      }
+    }
+  </script>
+</body>
+</html>
+

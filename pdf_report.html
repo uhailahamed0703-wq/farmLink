@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FARMLINK – Complete View-by-View System Architecture & UI/UX Documentation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    
+    @page {
+      size: A4 portrait;
+      margin: 15mm 15mm 15mm 15mm;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #18251D;
+      background: #FFFFFF;
+      line-height: 1.5;
+      font-size: 11pt;
+    }
+    
+    /* Cover Page */
+    .cover-page {
+      page-break-after: always;
+      height: 96vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 20px;
+      border: 3px solid #16834A;
+      border-radius: 20px;
+      background: linear-gradient(175deg, #FAFDFB 0%, #EAF7EF 100%);
+    }
+    
+    .cover-badge {
+      display: inline-block;
+      background: #16834A;
+      color: #FFFFFF;
+      font-size: 10pt;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    
+    .cover-title {
+      font-size: 38pt;
+      font-weight: 900;
+      color: #105C37;
+      line-height: 1.1;
+      margin: 20px 0 10px 0;
+      letter-spacing: -0.03em;
+    }
+    
+    .cover-tagline {
+      font-size: 16pt;
+      font-weight: 600;
+      color: #16834A;
+      margin-bottom: 25px;
+    }
+    
+    .cover-desc {
+      font-size: 12pt;
+      color: #4A5568;
+      max-width: 650px;
+      line-height: 1.6;
+    }
+    
+    .cover-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 2px dashed #C8E8D5;
+    }
+    
+    .cover-meta-item strong {
+      display: block;
+      color: #105C37;
+      font-size: 11pt;
+      margin-bottom: 2px;
+    }
+    
+    .cover-meta-item span {
+      color: #64748B;
+      font-size: 10pt;
+    }
+    
+    /* View Detail Pages */
+    .view-page {
+      page-break-after: always;
+      padding-top: 10px;
+    }
+    
+    .view-page:last-child {
+      page-break-after: avoid;
+    }
+    
+    .view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 2px solid #16834A;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .view-title {
+      font-size: 16pt;
+      font-weight: 800;
+      color: #105C37;
+    }
+    
+    .view-category {
+      font-size: 9pt;
+      font-weight: 700;
+      background: #EAF7EF;
+      color: #16834A;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid #C8E8D5;
+    }
+    
+    .view-screenshot-frame {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1.5px solid #CBD5E1;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      margin-bottom: 14px;
+      background: #F8FAFC;
+    }
+    
+    .view-screenshot-img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+    
+    .view-caption-card {
+      background: #F7F9F7;
+      border-radius: 12px;
+      border: 1px solid #E2E8F0;
+      padding: 14px 18px;
+    }
+    
+    .view-caption-title {
+      font-size: 11pt;
+      font-weight: 800;
+      color: #105C37;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .view-meta-row {
+      display: flex;
+      gap: 20px;
+      font-size: 8.5pt;
+      color: #64748B;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #CBD5E1;
+    }
+    
+    .view-meta-row span strong {
+      color: #1E293B;
+    }
+    
+    .view-desc-text {
+      font-size: 9.5pt;
+      color: #334155;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+    
+    .view-features-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 15px;
+      font-size: 8.5pt;
+      color: #1E293B;
+      margin-bottom: 8px;
+    }
+    
+    .view-features-list li {
+      position: relative;
+      padding-left: 14px;
+      line-height: 1.35;
+    }
+    
+    .view-features-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #16834A;
+      font-weight: bold;
+    }
+    
+    .view-impact-box {
+      background: #EAF7EF;
+      border-left: 3px solid #16834A;
+      padding: 6px 12px;
+      font-size: 8.5pt;
+      color: #105C37;
+      border-radius: 0 6px 6px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- COVER PAGE -->
+  <div class="cover-page">
+    <div>
+      <span class="cover-badge">Platform System Architecture & UI/UX Audit</span>
+      <h1 class="cover-title">FARMLINK</h1>
+      <div class="cover-tagline">"Connecting Farms. Growing Businesses."</div>
+      <p class="cover-desc">
+        Farmlink is a production-grade agricultural B2B digital marketplace connecting local verified farmers with commercial food businesses—including restaurants, supermarkets, hotels, and institutional caterers. This document details each screen, interaction pattern, and business functionality across the ecosystem.
+      </p>
+    </div>
+
+    <div>
+      <div class="cover-meta-grid">
+        <div class="cover-meta-item">
+          <strong>Operating Environment</strong>
+          <span>Local Development Stack (Node.js / Python HTTP 3000)</span>
+        </div>
+        <div class="cover-meta-item">
+          <strong>Design System</strong>
+          <span>Apple iOS Theme • Inter Typography • Emerald & Forest Green</span>
+        </div>
+        <div class="cover-meta-item">
+          <strong>Geographic Pilot Area</strong>
+          <span>West Java Agricultural Hub (Lembang, Pangalengan, Cianjur, Sukabumi, Subang)</span>
+        </div>
+        <div class="cover-meta-item">
+          <strong>User Stakeholders</strong>
+          <span>Farmers (Producers) • Commercial Buyers (F&B) • Platform Administrators</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 01_auth_page -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">1. Authentication & Role Selection (`auth.html`)</h2>
+      <span class="view-category">Security & Access</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/01_auth_page.png" alt="1. Authentication & Role Selection (`auth.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Farmers, Commercial Business Buyers, Platform Administrators</span>
+        <span><strong>Endpoint:</strong> <code>auth.html</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        This is the primary gateway for all Farmlink platform users. It provides streamlined authentication with dedicated tabbed registration workflows tailored to specific user types.
+      </p>
+
+      <ul class="view-features-list">
+        <li>1-Click Instant Demo Profiles (Chef Dewa for Buyers, Pak Asep for Farmers, and Farmlink Operations Lead for Admin)</li><li>Farmer Registration Form with specialized fields: Farm Commercial Name, West Java Location, Land Size (Hectares), and Cultivation Method</li><li>Business Buyer Registration Form for Restaurants, Supermarkets, Hotels, and Industrial Catering with business addresses and license info</li><li>Local storage session persistence allowing immediate redirect to role-specific dashboards</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Eliminates friction in onboarding rural farmers and busy executive chefs, with clear role separation and rapid demo switching for stakeholders.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 02_landing_hero -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">2. Public Marketplace Landing Page (`index.html`)</h2>
+      <span class="view-category">Customer Acquisition & Overview</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/02_landing_hero.png" alt="2. Public Marketplace Landing Page (`index.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Prospective Restaurant Owners, Hotel F&B Directors, Agricultural Growers</span>
+        <span><strong>Endpoint:</strong> <code>index.html</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        The flagship landing page establishing Farmlink's brand, value proposition, and live agricultural price index. Designed with an Apple iOS aesthetic, soft green palette, and real agricultural landscape photography.
+      </p>
+
+      <ul class="view-features-list">
+        <li>Live West Java Farm Gate Price Index ticker showing real-time commodity rates (Romaine, Tomatoes, Chillies, Potatoes)</li><li>Dynamic platform impact statistics: 580+ Verified Farms, 1,420 Tons Delivered, 320+ Businesses, and <4.5 Hour harvest-to-kitchen delivery slot</li><li>Direct action buttons to explore wholesale produce, join as a farmer, or open the interactive West Java map</li><li>Universal demo mode bar at the top allowing instant switching between user roles</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Establishes transparency from day one by displaying benchmark farm-gate prices and building trust with commercial buyers seeking to cut out middlemen.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 03_marketplace -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">3. Wholesale B2B Produce Marketplace (`marketplace.html`)</h2>
+      <span class="view-category">Procurement & Trading</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/03_marketplace.png" alt="3. Wholesale B2B Produce Marketplace (`marketplace.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Commercial Kitchen Buyers, Supermarket Procurement Leads, Food Businesses</span>
+        <span><strong>Endpoint:</strong> <code>marketplace.html</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        The core e-commerce procurement engine. Commercial buyers can search, filter, and buy fresh agricultural produce directly from verified growers with wholesale volume tier pricing.
+      </p>
+
+      <ul class="view-features-list">
+        <li>Instant multi-attribute search across crop varieties, farmer names, and West Java highland locations</li><li>Horizontal category filter pills: Vegetables, Leafy Greens, Root Crops, Fruits, Culinary Herbs, and Organic Specialties</li><li>Advanced sidebar filters: Farming Method (Organic, Pesticide-Free, GAP), Origin Regency (Lembang, Pangalengan, Cianjur, Sukabumi, Subang), and Max Price Slider</li><li>High-resolution crop photography with harvest dates, available stock in kg, customer star ratings, and 1-click quantity stepper</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Enables commercial kitchens to order grade-A farm produce in wholesale quantities (50-500+ kg) with guaranteed price consistency and cold-chain integrity.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 04_product_detail -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">4. Product Specifications & Wholesale Tiers (`product-detail.html`)</h2>
+      <span class="view-category">Product Intelligence</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/04_product_detail.png" alt="4. Product Specifications & Wholesale Tiers (`product-detail.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Executive Chefs, Purchasing Managers, Quality Control Inspectors</span>
+        <span><strong>Endpoint:</strong> <code>product-detail.html?id=PRD-001</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        Comprehensive specification sheet for individual produce batches, including multi-tier volume discounts, farm verification certificates, and cold shelf-life data.
+      </p>
+
+      <ul class="view-features-list">
+        <li>Automated wholesale volume discount calculator (e.g. 25+ kg saves 5%, 100+ kg saves 12%)</li><li>Integrated Batch Traceability strip with direct link to lab pesticide audit certificates</li><li>Verified Producer Card showing farmer avatar, land size, farming practices, and direct WhatsApp contact</li><li>Technical harvest metrics: Harvest date, cold shelf life at 6-8°C, minimum order quantity, and pesticide residue verification (0.0 ppm)</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Gives culinary professionals complete confidence in produce freshness and safety while rewarding volume purchasing with automated wholesale pricing.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 05_farms_map -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">5. Nearby Farms Interactive Discovery Map (`farms-map.html`)</h2>
+      <span class="view-category">Geospatial Discovery</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/05_farms_map.png" alt="5. Nearby Farms Interactive Discovery Map (`farms-map.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Regional Buyers, Sustainability Officers, Farm Inspectors</span>
+        <span><strong>Endpoint:</strong> <code>farms-map.html</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        An interactive map powered by Leaflet and OpenStreetMap displaying verified agricultural clusters throughout West Java (Lembang, Pangalengan, Cicurug, Pacet, Subang, Bogor).
+      </p>
+
+      <ul class="view-features-list">
+        <li>Interactive custom Leaflet farm pins color-coded by certification (Green for Organic, Blue for Pesticide-Free)</li><li>Distance radius slider (15 to 120 km) with instant real-time distance calculations from buyer's kitchen location in Bandung</li><li>Synchronized split-screen layout: Clicking a farm in the sidebar smoothly flies the map and opens a rich preview popup</li><li>Farming method dropdown filter and direct links to public farm profiles</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Empowers businesses to source hyper-locally to reduce food miles, minimize transit emissions, and guarantee same-day farm-to-table freshness.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 06_farmer_profile -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">6. Public Farmer Profile & Crop Catalog (`farmer-profile.html`)</h2>
+      <span class="view-category">Producer Transparency</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/06_farmer_profile.png" alt="6. Public Farmer Profile & Crop Catalog (`farmer-profile.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Restaurant Chefs, Hotel F&B Buyers, Agricultural Partners</span>
+        <span><strong>Endpoint:</strong> <code>farmer-profile.html?id=F01</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        A dedicated public profile page celebrating the grower's heritage, land stewardship, official government certifications, and live available crops ready to order.
+      </p>
+
+      <ul class="view-features-list">
+        <li>Highland farm landscape cover photo, farmer portrait, and verified producer green seal</li><li>Operational statistics: Cultivated land area (4.5 Ha), farming methodology, customer rating (4.9/5.0), and 580+ completed B2B deliveries</li><li>Farm story detailing 3rd-generation heritage, regenerative soil practices, and mountain spring water irrigation</li><li>Live catalog of active harvest listings ready for immediate procurement</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Transforms anonymous agricultural commodities into human stories of craftsmanship, allowing restaurants to market authentic farm partnerships to their dining patrons.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 07_cart_checkout -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">7. Wholesale Procurement Cart & B2B Checkout (`cart-checkout.html`)</h2>
+      <span class="view-category">Order Processing & Payment</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/07_cart_checkout.png" alt="7. Wholesale Procurement Cart & B2B Checkout (`cart-checkout.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Restaurant Purchasing Managers, Finance Teams, Logistics Coordinators</span>
+        <span><strong>Endpoint:</strong> <code>cart-checkout.html</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        Consolidated B2B checkout handling multi-vendor farm orders, refrigerated cold-chain scheduling, delivery notes, and enterprise payment terms.
+      </p>
+
+      <ul class="view-features-list">
+        <li>Multi-item produce manifest with quantity steppers and automated bulk price recalculation</li><li>Delivery scheduler with early morning kitchen arrival slots (05:00 - 07:30 AM prep window)</li><li>Special handling notes for loading docks, kitchen bells, and produce temperature verification</li><li>Enterprise payment options: BCA Corporate Virtual Account, Mandiri Net-30 invoice credit, and instant B2B QRIS</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Accommodates commercial restaurant accounting standards (Net-30 payment terms) while organizing morning delivery logistics before daily lunch service begins.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 08_order_tracking -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">8. 7-Step Logistics Delivery Tracking (`order-tracking.html`)</h2>
+      <span class="view-category">Cold-Chain Logistics</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/08_order_tracking.png" alt="8. 7-Step Logistics Delivery Tracking (`order-tracking.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Receiving Staff, Head Chefs, Transport Dispatchers</span>
+        <span><strong>Endpoint:</strong> <code>order-tracking.html?id=ORD-2026-881</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        Comprehensive cold-chain delivery tracker featuring a 7-step telemetry timeline from farm harvest to kitchen delivery, live vehicle sensor data, and interactive status simulation.
+      </p>
+
+      <ul class="view-features-list">
+        <li>7-Step interactive delivery progress timeline: Order Placed -> Farmer Accepted -> Preparing Harvest -> Harvest Completed -> Picked Up -> In Transit -> Delivered</li><li>Live refrigerated cold-box telemetry sensor monitoring (6.8°C target temperature)</li><li>Dedicated driver information with direct Call and WhatsApp quick-connect buttons</li><li>Built-in Demo Status Simulator allowing evaluators to step forward or rewind delivery status in real-time</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Provides total visibility over perishable fresh vegetables, preventing cold-chain breaks and ensuring kitchens know exactly when morning ingredients arrive.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 09_traceability -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">9. QR Code Batch Traceability Certificate (`traceability.html`)</h2>
+      <span class="view-category">Food Safety & Compliance</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/09_traceability.png" alt="9. QR Code Batch Traceability Certificate (`traceability.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Food Safety Officers, Michelin-starred Chefs, Hotel Auditors</span>
+        <span><strong>Endpoint:</strong> <code>traceability.html?batch=BATCH-ROM-2026-081</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        Digital farm-to-table certificate confirming the authenticity, agricultural provenance, chemical residue analysis, and harvesting conditions for any individual crop crate.
+      </p>
+
+      <ul class="view-features-list">
+        <li>Official Farmlink cryptographic batch seal and unique Batch ID tracking</li><li>Certified laboratory pesticide residue report: 0.0 ppm (Passed Sucofindo audit)</li><li>Exact dawn harvesting timestamp and soil altitude records (1,250 meters above sea level)</li><li>Integrated camera QR barcode scanner support plus instant sample batch selector pills for testing</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Solves food safety liability for high-end dining and hospital catering by providing verifiable, audit-ready proof of clean, chemical-free agricultural practices.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 10_farmer_dashboard -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">10. Dedicated Farmer Dashboard (`farmer-dashboard.html`)</h2>
+      <span class="view-category">Producer Operations</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/10_farmer_dashboard.png" alt="10. Dedicated Farmer Dashboard (`farmer-dashboard.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Agricultural Producers, Farm Managers, Rural Farming Cooperatives</span>
+        <span><strong>Endpoint:</strong> <code>farmer-dashboard.html</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        The command center for farmers to manage their business: list upcoming harvests, update stock, accept incoming restaurant purchase orders, and monitor bank earnings.
+      </p>
+
+      <ul class="view-features-list">
+        <li>Key operational metrics: Active listed crops, pending morning harvest orders, and monthly revenue (Rp 48.250.000)</li><li>Add Harvest Listing modal with real agricultural image selection, price per kg, and GAP farming labels</li><li>Order management workflow with actions to accept orders, initiate harvest, and signal courier cold pickup</li><li>Earnings tab with bank payout history and 1-click withdrawal requests to local Indonesian banks (BCA/Mandiri)</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Empowers smallholder and commercial farmers with simple, accessible digital tools to sell directly to premium commercial buyers without relying on middlemen.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 11_buyer_dashboard -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">11. Commercial Business Buyer Dashboard (`buyer-dashboard.html`)</h2>
+      <span class="view-category">Procurement Management</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/11_buyer_dashboard.png" alt="11. Commercial Business Buyer Dashboard (`buyer-dashboard.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Executive Chefs, Restaurant General Managers, Supermarket Fresh Category Leads</span>
+        <span><strong>Endpoint:</strong> <code>buyer-dashboard.html</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        Procurement hub for commercial buyers to manage ongoing standing subscriptions, active logistics deliveries, repeat farmer relationships, and monthly spending.
+      </p>
+
+      <ul class="view-features-list">
+        <li>Procurement spending overview: Total orders, active shipments, monthly budget, and active recurring subscriptions</li><li>Standing automated delivery subscriptions (e.g. Weekly Monday & Thursday lettuce and tomato restocks)</li><li>Saved Farmers directory with 1-click re-order capabilities</li><li>Live active delivery monitoring card with cold-box telemetry status and direct tracking links</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Automates routine kitchen ingredient procurement so chefs can focus on culinary creation rather than negotiating produce deliveries each morning.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: 12_admin_dashboard -->
+  <div class="view-page">
+    <div class="view-header">
+      <h2 class="view-title">12. Administrator Operations Portal (`admin-dashboard.html`)</h2>
+      <span class="view-category">Governance & Platform Control</span>
+    </div>
+
+    <!-- Screenshot Image -->
+    <div class="view-screenshot-frame">
+      <img src="screenshots/12_admin_dashboard.png" alt="12. Administrator Operations Portal (`admin-dashboard.html`)" class="view-screenshot-img" />
+    </div>
+
+    <!-- Description & Analysis Under Screenshot -->
+    <div class="view-caption-card">
+      <div class="view-caption-title">
+        <span>🔎 Overview & Interaction Architecture</span>
+      </div>
+
+      <div class="view-meta-row">
+        <span><strong>Target Users:</strong> Farmlink Operations Team, Platform Executives, Quality Assurance Auditors</span>
+        <span><strong>Endpoint:</strong> <code>admin-dashboard.html</code></span>
+      </div>
+
+      <p class="view-desc-text">
+        System-wide administration portal for auditing farmer verification requests, overseeing platform gross merchandise value (GMV), and moderating agricultural listings.
+      </p>
+
+      <ul class="view-features-list">
+        <li>High-level financial telemetry: Platform GMV (Rp 842,5 Million), 1,420 completed orders, and active farmer counts</li><li>Interactive Chart.js visualizations: Monthly GMV growth curve and West Java supply distribution by regency</li><li>Farmer Verification Approval Queue: Inspect land certificates and grant official verified green seals</li><li>Global order feed and product catalog moderation tools</li>
+      </ul>
+
+      <div class="view-impact-box">
+        <strong>Strategic Business Value:</strong> Maintains strict quality standards across the two-sided agricultural marketplace, ensuring only verified farms and reputable commercial businesses transact.
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

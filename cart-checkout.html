@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Wholesale Cart & Checkout – FARMLINK</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#16834A" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <style>
+    .payment-option {
+      background: var(--fl-bg);
+      border: 1px solid var(--fl-border);
+      border-radius: var(--fl-radius-md);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: all var(--fl-transition-fast);
+      margin-bottom: 0.75rem;
+    }
+    .payment-option.active {
+      background: var(--fl-primary-light);
+      border-color: var(--fl-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="fl-navbar">
+    <div class="fl-nav-container">
+      <a href="index.html" class="fl-logo">
+        <div class="fl-logo-icon">
+          <i class="bi bi-flower1"></i>
+        </div>
+        <span>FARMLINK</span>
+      </a>
+
+      <ul class="fl-nav-links">
+        <li><a href="marketplace.html" class="fl-nav-link">Marketplace</a></li>
+        <li><a href="buyer-dashboard.html" class="fl-nav-link">My Dashboard</a></li>
+        <li><a href="order-tracking.html" class="fl-nav-link">Track Delivery</a></li>
+      </ul>
+
+      <div class="fl-nav-actions">
+        <a href="marketplace.html" class="fl-btn fl-btn-outline fl-btn-sm">
+          <i class="bi bi-plus-lg"></i> Add More Produce
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="fl-container">
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--fl-primary-dark); line-height: 1.2;">
+        Wholesale B2B Checkout
+      </h1>
+      <p style="color: var(--fl-text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">
+        Direct consolidation from West Java verified farms with guaranteed cold-chain logistics.
+      </p>
+    </div>
+
+    <div id="checkout-empty-view" style="display: none; text-align: center; padding: 4rem 1.5rem; background: #FFFFFF; border-radius: var(--fl-radius-xl); border: 1px dashed var(--fl-border);">
+      <div style="width: 72px; height: 72px; background: var(--fl-primary-light); color: var(--fl-primary-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto; font-size: 2.2rem;">
+        <i class="bi bi-cart-x"></i>
+      </div>
+      <h3 style="font-size: 1.35rem; font-weight: 700;">Your Cart is Empty</h3>
+      <p style="color: var(--fl-text-secondary); margin: 0.5rem auto 1.5rem auto; max-width: 420px;">
+        Add fresh farm produce batches to your procurement cart before proceeding to checkout.
+      </p>
+      <a href="marketplace.html" class="fl-btn fl-btn-primary">
+        Browse Available Harvests <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- Active Checkout Grid -->
+    <div id="checkout-active-view" style="display: grid; grid-template-columns: 1fr; gap: 2rem;" class="lg:grid-cols-3">
+      
+      <!-- Left Column (Span 2): Cart Items & Delivery Details -->
+      <div style="grid-column: span 2;">
+        
+        <!-- Cart Items Card -->
+        <div class="fl-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--fl-border-light); padding-bottom: 0.75rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700;">1. Ordered Produce Batches</h3>
+            <span id="checkout-item-count" style="font-size: 0.85rem; color: var(--fl-text-secondary); font-weight: 600;">0 items</span>
+          </div>
+
+          <div id="checkout-items-list">
+            <!-- Dynamic item list -->
+          </div>
+        </div>
+
+        <!-- Logistics & Delivery Slot Card -->
+        <div class="fl-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1.25rem; border-bottom: 1px solid var(--fl-border-light); padding-bottom: 0.75rem;">
+            2. Delivery Schedule & Destination
+          </h3>
+
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Business / Restaurant Name</label>
+              <input type="text" id="delivery-business-name" class="fl-input" value="Resto Nusantara Gourmet Bandung" />
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Contact Person / Head Chef</label>
+              <input type="text" id="delivery-contact-name" class="fl-input" value="Chef Dewa Santika (+62 811-2233-4455)" />
+            </div>
+          </div>
+
+          <div class="fl-form-group">
+            <label class="fl-label">Delivery Street Address</label>
+            <textarea id="delivery-address" class="fl-textarea" rows="2">Jl. Riau No. 128, Cihapit, Bandung, Jawa Barat (Loading Dock B)</textarea>
+          </div>
+
+          <div class="fl-grid-2">
+            <div class="fl-form-group">
+              <label class="fl-label">Preferred Delivery Date</label>
+              <input type="date" id="delivery-date" class="fl-input" />
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Kitchen Arrival Slot</label>
+              <select id="delivery-slot" class="fl-select">
+                <option value="05:00 - 07:30 WIB (Early Morning Kitchen Prep)">05:00 - 07:30 WIB (Early Morning Kitchen Prep)</option>
+                <option value="08:00 - 10:30 WIB (Before Lunch Service)">08:00 - 10:30 WIB (Before Lunch Service)</option>
+                <option value="14:00 - 16:30 WIB (Afternoon Restock)">14:00 - 16:30 WIB (Afternoon Restock)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fl-form-group">
+            <label class="fl-label">Special Handling & Delivery Notes</label>
+            <input type="text" id="delivery-notes" class="fl-input" placeholder="e.g. Ring kitchen bell at loading bay, check cold crate temperature before sign-off." value="Ring kitchen bell at loading bay, verify tomato crates before signing." />
+          </div>
+        </div>
+
+        <!-- Payment Method Card -->
+        <div class="fl-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1.25rem; border-bottom: 1px solid var(--fl-border-light); padding-bottom: 0.75rem;">
+            3. Commercial Payment Method
+          </h3>
+
+          <div class="payment-option active" onclick="selectPayment(this, 'BCA Corporate Virtual Account')">
+            <input type="radio" name="payment" checked />
+            <div style="flex:1;">
+              <div style="font-weight: 700; font-size: 0.95rem;">BCA Corporate Virtual Account</div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">Instant verification with auto-reconciliation invoice</div>
+            </div>
+            <span class="fl-badge fl-badge-verified">Instant</span>
+          </div>
+
+          <div class="payment-option" onclick="selectPayment(this, 'Bank Mandiri Net-30')">
+            <input type="radio" name="payment" />
+            <div style="flex:1;">
+              <div style="font-weight: 700; font-size: 0.95rem;">Corporate Net-30 Term Invoice</div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">Verified B2B account credit (Pay within 30 days of receipt)</div>
+            </div>
+            <span class="fl-badge fl-badge-organic">Credit Approved</span>
+          </div>
+
+          <div class="payment-option" onclick="selectPayment(this, 'QRIS Instant B2B')">
+            <input type="radio" name="payment" />
+            <div style="flex:1;">
+              <div style="font-weight: 700; font-size: 0.95rem;">QRIS Instant QR</div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">Scan using BCA, Mandiri, GoPay, or any mobile banking app</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Order Summary & Confirm -->
+      <div>
+        <div class="fl-card" style="padding: 1.5rem; position: sticky; top: 80px;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1.25rem;">Order Cost Summary</h3>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; color: var(--fl-text-secondary);">
+            <div style="display: flex; justify-content: space-between;">
+              <span>Produce Batch Subtotal</span>
+              <strong id="summary-subtotal" style="color: var(--fl-text);">Rp 0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Cold-Chain Refrigerated Logistics</span>
+              <strong id="summary-delivery" style="color: var(--fl-text);">Rp 45.000</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Quality Assurance & Lab Traceability</span>
+              <strong id="summary-platform" style="color: var(--fl-text);">Rp 15.000</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #16834A;">
+              <span>Direct-from-Farm Saving Applied</span>
+              <strong>- Rp 124.000 (avg)</strong>
+            </div>
+          </div>
+
+          <div style="border-top: 1px dashed var(--fl-border); margin: 1.25rem 0; padding-top: 1rem; display: flex; justify-content: space-between; align-items: baseline;">
+            <div>
+              <div style="font-size: 0.8rem; color: var(--fl-text-muted);">Total Order Amount</div>
+              <div id="summary-total" style="font-size: 1.8rem; font-weight: 900; color: var(--fl-primary-dark);">
+                Rp 0
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-verified">Inc. VAT</span>
+          </div>
+
+          <div style="background: var(--fl-primary-light); border-radius: var(--fl-radius-md); padding: 0.85rem; font-size: 0.8rem; color: var(--fl-primary-dark); margin-bottom: 1.25rem; display: flex; gap: 0.5rem; align-items: flex-start;">
+            <i class="bi bi-shield-check" style="font-size: 1.1rem; flex-shrink: 0;"></i>
+            <span>Farmlink Spoilage Guarantee: Any damaged item during transport is refunded 100% within 1 hour.</span>
+          </div>
+
+          <button id="btn-place-order" class="fl-btn fl-btn-primary fl-btn-lg" style="width: 100%; border-radius: var(--fl-radius-pill);" onclick="placeWholesaleOrder()">
+            Confirm & Place Order <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let selectedPaymentMethod = "BCA Corporate Virtual Account";
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Default delivery date to tomorrow
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('delivery-date').value = tomorrow.toISOString().split('T')[0];
+
+      // If cart is empty, seed demo wholesale items so checkout UI is active
+      let cart = window.store.getCart();
+      if (cart.length === 0) {
+        window.store.addToCart('PRD-001', 30);
+        window.store.addToCart('PRD-002', 50);
+      }
+
+      renderCheckout();
+    });
+
+    function selectPayment(el, method) {
+      document.querySelectorAll('.payment-option').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      el.querySelector('input[type="radio"]').checked = true;
+      selectedPaymentMethod = method;
+    }
+
+    function renderCheckout() {
+      const cart = window.store.getCart();
+      const emptyView = document.getElementById('checkout-empty-view');
+      const activeView = document.getElementById('checkout-active-view');
+      const list = document.getElementById('checkout-items-list');
+
+      if (cart.length === 0) {
+        emptyView.style.display = 'block';
+        activeView.style.display = 'none';
+        return;
+      }
+
+      emptyView.style.display = 'none';
+      activeView.style.display = 'grid';
+
+      document.getElementById('checkout-item-count').textContent = `${cart.length} produce varieties`;
+
+      list.innerHTML = cart.map(item => `
+        <div style="display: flex; gap: 1rem; align-items: center; padding: 0.85rem 0; border-bottom: 1px solid var(--fl-border-light); flex-wrap: wrap;">
+          <img src="${item.image}" alt="${item.productName}" style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover;" />
+          <div style="flex: 1; min-width: 180px;">
+            <div style="font-weight: 700; font-size: 0.95rem; color: var(--fl-text);">${item.productName}</div>
+            <div style="font-size: 0.8rem; color: var(--fl-text-secondary);">${item.farmName} • ${item.location}</div>
+            <div style="font-size: 0.85rem; color: var(--fl-primary-dark); font-weight: 600;">${formatRupiah(item.price)} / kg</div>
+          </div>
+          <div class="fl-stepper">
+            <button class="fl-stepper-btn" onclick="updateQty('${item.productId}', ${item.quantity - 5})">-</button>
+            <input type="text" class="fl-stepper-val" value="${item.quantity} kg" readonly />
+            <button class="fl-stepper-btn" onclick="updateQty('${item.productId}', ${item.quantity + 5})">+</button>
+          </div>
+          <div style="font-weight: 800; font-size: 1.05rem; min-width: 100px; text-align: right; color: var(--fl-primary-dark);">
+            ${formatRupiah(item.price * item.quantity)}
+          </div>
+          <button onclick="removeItem('${item.productId}')" style="background:none; border:none; color: #CBD5E1; cursor:pointer;">
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>
+      `).join('');
+
+      const totals = window.store.getCartTotal();
+      document.getElementById('summary-subtotal').textContent = formatRupiah(totals.subtotal);
+      document.getElementById('summary-delivery').textContent = formatRupiah(totals.deliveryFee);
+      document.getElementById('summary-platform').textContent = formatRupiah(totals.platformFee);
+      document.getElementById('summary-total').textContent = formatRupiah(totals.total);
+    }
+
+    function updateQty(id, qty) {
+      window.store.updateCartQuantity(id, qty);
+      renderCheckout();
+    }
+
+    function removeItem(id) {
+      window.store.removeFromCart(id);
+      renderCheckout();
+    }
+
+    function placeWholesaleOrder() {
+      const cart = window.store.getCart();
+      if (cart.length === 0) return;
+
+      const totals = window.store.getCartTotal();
+      const currentUser = window.store.getCurrentUser();
+
+      const newOrderData = {
+        buyerId: currentUser ? currentUser.id : "B01",
+        buyerName: currentUser ? currentUser.name : "Chef Dewa Santika",
+        businessName: document.getElementById('delivery-business-name').value,
+        farmerId: cart[0].farmerId,
+        farmerName: cart[0].farmerName,
+        farmName: cart[0].farmName,
+        deliveryAddress: document.getElementById('delivery-address').value,
+        deliveryDate: document.getElementById('delivery-date').value,
+        deliverySlot: document.getElementById('delivery-slot').value,
+        deliveryNotes: document.getElementById('delivery-notes').value,
+        items: cart.map(i => ({
+          productId: i.productId,
+          productName: i.productName,
+          price: i.price,
+          quantity: i.quantity,
+          unit: i.unit,
+          total: i.price * i.quantity,
+          image: i.image
+        })),
+        subtotal: totals.subtotal,
+        deliveryFee: totals.deliveryFee,
+        platformFee: totals.platformFee,
+        totalAmount: totals.total,
+        paymentMethod: selectedPaymentMethod,
+        batchId: "BATCH-" + Math.floor(1000 + Math.random() * 9000)
+      };
+
+      const createdOrder = window.store.createOrder(newOrderData);
+      window.store.clearCart();
+
+      FarmlinkToast.show("Wholesale Order Placed Successfully! Redirecting to tracker...", "success");
+      setTimeout(() => {
+        window.location.href = `order-tracking.html?id=${createdOrder.id}`;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
+
